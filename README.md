@@ -1,4 +1,5 @@
 # boss-man-game
+
 Tiny VR Game using only gaze for input
 Currently runs on Android GearVR, Oculus, and Fove.
 currently implemented:
@@ -14,3 +15,9 @@ you are the boss man, use your power and influence to control your lackeys, puni
 bribe officials, open a trap door under a people who are inconvenient. make big profits.
 
 lots of work to do!
+
+[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
+
+to launch in unity open UnityProject/Assets/Scenes/StartOffice.unity
+
+build for android for now.
