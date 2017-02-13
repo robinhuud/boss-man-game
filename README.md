@@ -18,6 +18,6 @@ lots of work to do!
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 
-to launch in unity open UnityProject/Assets/Scenes/StartOffice.unity
+to launch in unity open UnityBossManGame/Assets/Scenes/StartOffice.unity
 
 build for android for now.
