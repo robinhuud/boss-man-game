@@ -11,7 +11,6 @@ using UnityEngine;
 
 public static class GameObjectExtension
 {
-    public static bool highlighted = false;
     public static void ActivateHighlight(this GameObject go)
     {
         //Debug.Log("Activating Highlight!!");
@@ -31,7 +30,6 @@ public static class GameObjectExtension
             }
 #endif
         }
-        highlighted = true;
     }
 
     public static void DeactivateHighlight(this GameObject go)
@@ -53,12 +51,6 @@ public static class GameObjectExtension
             }
 #endif
         }
-        highlighted = false;
-    }
-
-    public static bool isHighlighted(this GameObject go)
-    {
-        return highlighted;
     }
 }
 
@@ -130,11 +122,12 @@ public class Gaze_Check : MonoBehaviour
                     selectedObj = seen.transform.gameObject;
                     selectedObj.ActivateHighlight();
                     selectedTime = Time.time;
+                    hasToggled = false;
                     waiting = true;
                 }
                 else
                 {
-                    if(!hasToggled && Time.time - selectedTime > activation_time) // has it been 2 or more seconds since i first highlighted this object?
+                    if(!hasToggled && Time.time - selectedTime > activation_time) // has it been activation_time or more seconds since i first highlighted this object?
                     {
                         IDeviceControl dc = selectedObj.GetComponent<IDeviceControl>();
                         if(dc != null)
@@ -150,10 +143,6 @@ public class Gaze_Check : MonoBehaviour
                     }
                 }
             }
-            
-            // we hit something that has the correct tag.
-            // now look to see if this is a new object (different from "selectedObj")
-
             else
             {
                 // Raycast returns false if we didn't hit any colliders tagged "TOUCHABLE"

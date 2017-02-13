@@ -18,6 +18,6 @@ lots of work to do!
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 
-to launch in unity open UnityBossManGame/Assets/Scenes/StartOffice.unity
+to launch in Unity 5.5 open UnityBossManGame/Assets/Scenes/StartOffice.unity
 
-build for android for now.
+build for android for now, you will need to create your own keystore and key to publish, as well as including your own oculus ID in the Assets/Plugins/Android directory.

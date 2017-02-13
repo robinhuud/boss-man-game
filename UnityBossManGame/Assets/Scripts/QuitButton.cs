@@ -15,10 +15,9 @@ public class QuitButton : MonoBehaviour, IDeviceControl {
 
     private IEnumerator confirmationTimer()
     {
-        while (this.GetComponent<GameObject>().isHighlighted() || confirmObject.isHighlighted())
-        {
-            yield return new WaitForSeconds(confirmDelay);
-        }
+        confirming = true;
+        confirmObject.SetActive(true);
+        yield return new WaitForSeconds(confirmDelay);
         confirmObject.SetActive(false);
         confirming = false;
     }
@@ -40,13 +39,7 @@ public class QuitButton : MonoBehaviour, IDeviceControl {
         if(!confirming)
         {
             //Debug.Log("Turning 'confirming' on");
-            confirming = true;
-            confirmObject.SetActive(true);
             StartCoroutine(confirmationTimer());
-        }
-        else
-        {
-            Application.Quit();
         }
     }
 
