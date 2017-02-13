@@ -6,8 +6,12 @@
 
 using UnityEngine;
 
+// First I extend GameObject to add 3 methods:
+// these default methods work for my custom highlight shader
+
 public static class GameObjectExtension
 {
+    public static bool highlighted = false;
     public static void ActivateHighlight(this GameObject go)
     {
         //Debug.Log("Activating Highlight!!");
@@ -20,13 +24,14 @@ public static class GameObjectExtension
                 glow.a = 1f;
                 mat[i].SetColor("_HighlightColor", glow);
             }
-#if UNITY_ANDROID
+#if UNITY_ANDROID // android has some weird scaling issues sometimes in VR, so I set the scale of the highlight to fix it (kind of)
             if(mat[i].HasProperty("_HighlightWidth"))
             {
                 mat[i].SetFloat("_HighlightWidth", mat[i].GetFloat("_HighlightWidth") * .05f);
             }
 #endif
         }
+        highlighted = true;
     }
 
     public static void DeactivateHighlight(this GameObject go)
@@ -48,6 +53,12 @@ public static class GameObjectExtension
             }
 #endif
         }
+        highlighted = false;
+    }
+
+    public static bool isHighlighted(this GameObject go)
+    {
+        return highlighted;
     }
 }
 
@@ -128,7 +139,7 @@ public class Gaze_Check : MonoBehaviour
                         IDeviceControl dc = selectedObj.GetComponent<IDeviceControl>();
                         if(dc != null)
                         {
-                            dc.toggle();
+                            dc.activate();
                             hasToggled = true;
                             waiting = false;
                         }

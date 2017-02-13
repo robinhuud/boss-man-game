@@ -24,7 +24,7 @@ public class LightButton : MonoBehaviour, IDeviceControl {
 	
 	}
 
-    public void toggle()
+    public void activate()
     {
         isOn = !isOn;
         if(isOn)

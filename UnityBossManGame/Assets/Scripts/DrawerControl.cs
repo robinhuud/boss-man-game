@@ -34,7 +34,7 @@ public class DrawerControl : MonoBehaviour, IDeviceControl {
 		
 	}
 
-    public void toggle()
+    public void activate()
     {
         if (isOpen)
         {

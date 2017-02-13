@@ -22,7 +22,7 @@ public class LightControl : MonoBehaviour, IDeviceControl {
         au = GetComponent<AudioSource>();
     }
 	
-    public void toggle()
+    public void activate()
     {
         if(isOn)
         {

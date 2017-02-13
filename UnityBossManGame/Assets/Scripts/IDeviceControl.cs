@@ -8,7 +8,7 @@ public interface IDeviceControl
 {
     // method should toggle whatever internal state, and activate any animations
     // or state changes that happen as a result
-    void toggle();
+    void activate();
     // return whether this object is "on" (activated) or "off" (not activated)
     bool isActive();
 }
