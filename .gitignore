@@ -58,6 +58,7 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 
-#Ignore .keystore files
+#Ignore .keystore files and .json files (could contain auth data)
 *.keystore
+*.json
 
