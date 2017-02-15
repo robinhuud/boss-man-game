@@ -76,7 +76,9 @@ namespace UnitySpeechToText.Services
             uH.contentType = "application/json";
             request.uploadHandler = uH;
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.Send();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.Send();
             SmartLogger.Log(DebugFlags.GoogleNonStreamingSpeechToText, "sent request");
 
             while (!request.isDone)

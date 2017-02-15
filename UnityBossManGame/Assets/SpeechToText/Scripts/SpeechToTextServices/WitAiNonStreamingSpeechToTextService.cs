@@ -50,7 +50,9 @@ namespace UnitySpeechToText.Services
             UnityWebRequest request = new UnityWebRequest(Constants.WitAiSpeechToTextBaseURL + "?" +
                 Constants.WitAiVersionParameterName + "=" + DateTime.Now.ToString(Constants.WitAiVersionDateFormat), UnityWebRequest.kHttpVerbPOST);
             request.SetRequestHeader("Authorization", "Bearer " + m_APIAccessToken);
+            request.SetRequestHeader("Content-Type", "audio/wav");
             UploadHandler uH = new UploadHandlerRaw(File.ReadAllBytes(recordedAudioFilePath));
+            //uH.contentType = "audio/wav";
             uH.contentType = "audio/wav";
             DownloadHandler dH = new DownloadHandlerBuffer();
             request.downloadHandler = dH;
