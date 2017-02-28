@@ -38,12 +38,12 @@ public class ButtonControl : MonoBehaviour, IDeviceControl {
     {
         if(isOpen)
         {
-            //Debug.Log("was open, setting open to false");
+            Debug.Log("was open, setting open to false");
             controlObject.SetBool(trigger_name, false);
         }
         else
         {
-            //Debug.Log("was closed, setting open to true");
+            Debug.Log("was closed, setting open to true");
             controlObject.SetBool(trigger_name, true);
         }
         isOpen = controlObject.GetBool(trigger_name);

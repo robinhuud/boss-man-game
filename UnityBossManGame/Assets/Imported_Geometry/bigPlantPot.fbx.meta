@@ -1,22 +1,15 @@
 fileFormatVersion: 2
-guid: 835273a49f4e6e54391f074fe4cfdd89
-timeCreated: 1484852492
+guid: a908d4498fe14184082ac1b1a365a4ba
+timeCreated: 1487893743
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Fixture
-    100002: //RootNode
-    100004: Walls
-    400000: Fixture
-    400002: //RootNode
-    400004: Walls
-    2300000: Fixture
-    2300002: Walls
-    3300000: Fixture
-    3300002: Walls
-    4300000: Fixture
-    4300002: Walls
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: BigPlant
   materials:
     importMaterials: 0
     materialName: 0
@@ -38,17 +31,17 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importBlendShapes: 1
+    importBlendShapes: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
+    optimizeMeshForGPU: 0
     keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8
@@ -60,7 +53,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2

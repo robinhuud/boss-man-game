@@ -16,6 +16,8 @@ public class LightButton : MonoBehaviour, IDeviceControl {
 	void Start () {
         isOn = false;
         myMat = GetComponent<Renderer>().material;
+        // this little bit of insanity is lazy coding, just grabs a object of type SceneControl out of my parent, no check
+        // to see if it's valid, nothing. (bad programer)
         parentScript = GetComponentInParent<SceneControl>();
 	}
 	

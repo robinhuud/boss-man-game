@@ -129,12 +129,15 @@ public class Gaze_Check : MonoBehaviour
                 {
                     if(!hasToggled && Time.time - selectedTime > activation_time) // has it been activation_time or more seconds since i first highlighted this object?
                     {
-                        IDeviceControl dc = selectedObj.GetComponent<IDeviceControl>();
-                        if(dc != null)
+                        IDeviceControl[] dcs = selectedObj.GetComponents<IDeviceControl>();
+                        if(dcs != null)
                         {
-                            dc.activate();
-                            hasToggled = true;
-                            waiting = false;
+                            foreach(IDeviceControl dc in dcs)
+                            {
+                                dc.activate();
+                                hasToggled = true;
+                                waiting = false;
+                            }
                         }
                         else
                         {
