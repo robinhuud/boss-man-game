@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 3b5b0c238f06cc74286323bb03a292c7
-timeCreated: 1487878556
+timeCreated: 1488409063
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -47,8 +47,9 @@ ModelImporter:
     4300010: Fixture
     4300012: Door
     4300014: Walls
-    7400000: door_open
-    7400002: trapdoor_loop
+    7400000: Default Take
+    7400002: trapdoor
+    7400004: open_door
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -72,9 +73,101 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: door_open
+      name: Default Take
       takeName: Default Take
-      firstFrame: 25
+      firstFrame: 0
+      lastFrame: 89
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Door
+        weight: 1
+      - path: Fixture
+        weight: 1
+      - path: guestChair
+        weight: 1
+      - path: trapdoor1
+        weight: 1
+      - path: trapdoor2
+        weight: 1
+      - path: trapdoor3
+        weight: 1
+      - path: trapdoor4
+        weight: 1
+      - path: Walls
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: trapdoor
+      takeName: Default Take
+      firstFrame: 1
+      lastFrame: 35
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Door
+        weight: 1
+      - path: Fixture
+        weight: 1
+      - path: guestChair
+        weight: 1
+      - path: trapdoor1
+        weight: 1
+      - path: trapdoor2
+        weight: 1
+      - path: trapdoor3
+        weight: 1
+      - path: trapdoor4
+        weight: 1
+      - path: Walls
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: open_door
+      takeName: Default Take
+      firstFrame: 30
       lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
@@ -95,41 +188,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: trapdoor_loop
-      takeName: Default Take
-      firstFrame: 0
-      lastFrame: 36
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
       transformMask:
       - path: 
         weight: 1
       - path: Door
-        weight: 0
+        weight: 1
       - path: Fixture
-        weight: 0
+        weight: 1
       - path: guestChair
         weight: 1
       - path: trapdoor1
@@ -141,8 +206,8 @@ ModelImporter:
       - path: trapdoor4
         weight: 1
       - path: Walls
-        weight: 0
-      maskType: 0
+        weight: 1
+      maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     isReadable: 1
@@ -151,11 +216,11 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importBlendShapes: 1
+    importBlendShapes: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
+    optimizeMeshForGPU: 0
     keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8

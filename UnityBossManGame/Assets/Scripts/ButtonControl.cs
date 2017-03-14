@@ -11,6 +11,7 @@ public class ButtonControl : MonoBehaviour, IDeviceControl {
 
     public Animator controlObject;
     public string trigger_name;
+    private int trigger_hash;
     private bool isOpen;
     public AudioClip clickSound;
     AudioSource au;
@@ -23,7 +24,8 @@ public class ButtonControl : MonoBehaviour, IDeviceControl {
         }
         else
         {
-            isOpen = controlObject.GetBool(trigger_name);
+            trigger_hash = Animator.StringToHash(trigger_name);
+            isOpen = controlObject.GetBool(trigger_hash);
             //Debug.Log("isOpen is " + isOpen);
         }
         au = GetComponent<AudioSource>();
@@ -38,15 +40,15 @@ public class ButtonControl : MonoBehaviour, IDeviceControl {
     {
         if(isOpen)
         {
-            Debug.Log("was open, setting open to false");
-            controlObject.SetBool(trigger_name, false);
+            //Debug.Log("was open, setting open to false");
+            controlObject.SetBool(trigger_hash, false);
         }
         else
         {
-            Debug.Log("was closed, setting open to true");
-            controlObject.SetBool(trigger_name, true);
+            //Debug.Log("was closed, setting open to true");
+            controlObject.SetBool(trigger_hash, true);
         }
-        isOpen = controlObject.GetBool(trigger_name);
+        isOpen = controlObject.GetBool(trigger_hash);
         au.PlayOneShot(clickSound,1f);
     }
 
