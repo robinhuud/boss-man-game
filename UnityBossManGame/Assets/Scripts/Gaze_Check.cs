@@ -176,6 +176,7 @@ public class Gaze_Check : MonoBehaviour
     void OnPostRender()
     {
         // this is where I draw my little timer clock thingy
+        // to show how long you've beel looking at a "TOUCHABLE" object
         float t = Time.time;
         float a, angle, x, y, z, f;
         if(waiting && t > selectedTime && t < selectedTime + activation_time)

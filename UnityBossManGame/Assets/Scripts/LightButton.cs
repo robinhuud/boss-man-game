@@ -12,7 +12,7 @@ public class LightButton : MonoBehaviour, IDeviceControl {
     private Material myMat; // the instance of the material that I am using
     private SceneControl parentScript;
     public Color glowColor = new Color(1f, .05f, .05f);
-	// Use this for initialization
+	// Use this for runtime initialization
 	void Start () {
         isOn = false;
         myMat = GetComponent<Renderer>().material;
