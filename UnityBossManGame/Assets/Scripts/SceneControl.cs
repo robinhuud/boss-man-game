@@ -9,17 +9,12 @@ using UnityEngine.AI;
 
 public class SceneControl : MonoBehaviour {
 
-    [SerializeField] LightButton[] scripts;
     public employeeBehavior employeeScript;
 
     // This method is called from the editor cog menu, useful for attaching
     // serializable fileds with default values.
     void Reset()
     {
-        if(this.transform.childCount > 0)
-        {
-            scripts = GetComponentsInChildren<LightButton>();
-        }
     }
 
     // Use this for initialization
@@ -36,7 +31,7 @@ public class SceneControl : MonoBehaviour {
     // Need to define an interface for this?? WTF??
     public void react(LightButton caller)
     {
-        if (caller.GetComponentInParent<MonoBehaviour>().name.Equals("Door"))
+        if (caller.GetComponentInParent<MonoBehaviour>().name.Equals("Door") && caller.isActive()) // isActive gets set before we check it
         {
             employeeScript.TriggerNextEmployee();
         }

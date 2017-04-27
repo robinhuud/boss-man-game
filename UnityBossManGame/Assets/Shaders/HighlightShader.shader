@@ -1,4 +1,6 @@
-﻿// Upgrade NOTE: commented out 'float3 _WorldSpaceCameraPos', a built-in variable
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: commented out 'float3 _WorldSpaceCameraPos', a built-in variable
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
 
@@ -30,7 +32,7 @@ Shader "Custom/HighlightTest" {
 
 	v2f vert(appdata v) {
 		v2f o;
-		o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+		o.pos = UnityObjectToClipPos(v.vertex);
 		float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
 		float2 offset = TransformViewToProjection(norm.xy);
 		o.pos.xy += offset * o.pos.z * _HighlightWidth;

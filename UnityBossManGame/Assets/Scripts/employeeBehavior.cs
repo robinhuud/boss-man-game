@@ -6,6 +6,8 @@ public class employeeBehavior : MonoBehaviour {
     public Animator animator;
     public NavMeshAgent agent;
     public Transform target;
+
+    private bool stopped = false;
 	// Use this for initialization
 	void Start ()
     {
@@ -24,18 +26,22 @@ public class employeeBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		// check to see if we have arrived at our navmesh target
-        if(agent.remainingDistance <= agent.stoppingDistance )
+		// check to see if we have arrived at our navmesh target using a fudge factor of .75 meters to allow stopping animation
+        if(!stopped && agent.remainingDistance <= agent.stoppingDistance + .75f )
         {
+            stopped = true;
             animator.SetBool("Walking", false);
-            agent.updateRotation = false;
+            Debug.Log("Arrived at destination, stopping walk cycle");
+            //agent.updateRotation = false;
             //transform.rotation
         }
 	}
 
     public void TriggerNextEmployee()
     {
+        Debug.Log("Triggered next employee");
         agent.SetDestination(target.position);
         animator.SetBool("Walking", true);
+        stopped = false;
     }
 }
