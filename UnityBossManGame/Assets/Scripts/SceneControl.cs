@@ -33,7 +33,7 @@ public class SceneControl : MonoBehaviour {
     {
         if (caller.GetComponentInParent<MonoBehaviour>().name.Equals("Door") && caller.isActive()) // isActive gets set before we check it
         {
-            employeeScript.TriggerNextEmployee();
+            employeeScript.DoorOpened();
         }
     }
 }
