@@ -73,6 +73,7 @@ ModelImporter:
     7400020: SwingFoot
     7400022: UncrossLegs
     7400024: Stand
+    7400026: SitFidget
     9500000: //RootNode
     13700000: //RootNode
   materials:
@@ -85,6 +86,8 @@ ModelImporter:
     resampleCurves: 0
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -188,7 +191,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -201,7 +204,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.99735767
+        functionName: SteppedBack
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -259,7 +269,7 @@ ModelImporter:
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 19
+      additiveReferencePoseFrame: 14
     - serializedVersion: 16
       name: Walk
       takeName: Default Take
@@ -270,7 +280,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
@@ -341,7 +351,7 @@ ModelImporter:
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 69
     - serializedVersion: 16
       name: StartWalking
       takeName: Default Take
@@ -352,7 +362,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -423,7 +433,7 @@ ModelImporter:
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 44
     - serializedVersion: 16
       name: StopWalking
       takeName: Default Take
@@ -434,7 +444,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -505,7 +515,7 @@ ModelImporter:
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 119
     - serializedVersion: 16
       name: SitDown
       takeName: Default Take
@@ -516,7 +526,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -587,7 +597,7 @@ ModelImporter:
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 14
     - serializedVersion: 16
       name: TapFoot
       takeName: Default Take
@@ -611,7 +621,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 1.0689188
+        functionName: TapLoop
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -763,7 +780,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -775,7 +792,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 1.072072
+        functionName: CrossedLoop
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -926,7 +950,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 0
+      hasAdditiveReferencePose: 1
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
@@ -997,7 +1021,96 @@ ModelImporter:
         weight: 1
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 14
+    - serializedVersion: 16
+      name: SitFidget
+      takeName: Default Take
+      firstFrame: 209
+      lastFrame: 219
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 1
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 1.0599593
+        functionName: SitLoop
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: MaleArm
+        weight: 1
+      - path: MaleArm/Back
+        weight: 1
+      - path: MaleArm/Back/Head
+        weight: 1
+      - path: MaleArm/Back/Hip
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Left
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Left/Shin_Left
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Left/Shin_Left/Foot_Left
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Left/Shin_Left/Foot_Left/Toes_Left
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Right
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Right/Shin_Right
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Right/Shin_Right/Foot_Right
+        weight: 1
+      - path: MaleArm/Back/Hip/Thigh_Right/Shin_Right/Foot_Right/Toes_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left/Forearm_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left/Forearm_Left/Hand_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left/Forearm_Left/Hand_Left/Fingers1_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left/Forearm_Left/Hand_Left/Fingers1_Left/Fingers2_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left/Forearm_Left/Hand_Left/Thumb1_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Left/Forearm_Left/Hand_Left/Thumb1_Left/Thumb2_Left
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right/Forearm_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right/Forearm_Right/Hand_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right/Forearm_Right/Hand_Right/Fingers1_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right/Forearm_Right/Hand_Right/Fingers1_Right/Fingers2_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right/Forearm_Right/Hand_Right/Thumb1_Right
+        weight: 1
+      - path: MaleArm/Back/Upperarm_Right/Forearm_Right/Hand_Right/Thumb1_Right/Thumb2_Right
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 209
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -1033,7 +1146,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    rootMotionBoneName: 
+    rootMotionBoneName: MaleArm
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0

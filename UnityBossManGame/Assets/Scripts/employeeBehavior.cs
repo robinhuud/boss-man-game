@@ -28,18 +28,20 @@ public class employeeBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		// check to see if we have arrived at our navmesh target using a fudge factor of .75 meters to allow stopping animation
-        if(!stopped && agent.remainingDistance <= agent.stoppingDistance + .75f )
+        // check to see if we have arrived at our navmesh target using a fudge factor of .75 meters to allow stopping animation
+        if (!stopped)
         {
-            readyToSit();
+            if (agent.remainingDistance <= agent.stoppingDistance + .75f)
+            {
+                arrived();
+            }
         }
 	}
 
-    private void readyToSit()
+    private void arrived()
     {
         stopped = true;
         animator.SetBool("Walking", false);
-        
         StartCoroutine("queued_trigger");
         Debug.Log("Arrived at destination, stopping walk cycle");    
     }
@@ -47,7 +49,6 @@ public class employeeBehavior : MonoBehaviour {
     public void DoorOpened()
     {
         Debug.Log("Door has opened");
-        //agent.SetDestination(target.position);
         animator.SetBool("Walking", true);
         stopped = false;
     }
@@ -55,8 +56,9 @@ public class employeeBehavior : MonoBehaviour {
     IEnumerator queued_trigger()
     {
         AnimatorStateInfo a_info = animator.GetCurrentAnimatorStateInfo(0);
-        agent.updateRotation = false;
         yield return new WaitForSeconds(a_info.length);
+        agent.updateRotation = false;
+        transform.LookAt(lookTarget);
         animator.SetTrigger("step_back");
         while (!a_info.IsName("StepBack"))
         {
@@ -64,8 +66,8 @@ public class employeeBehavior : MonoBehaviour {
             a_info = animator.GetCurrentAnimatorStateInfo(0);
         }
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-        //agent.updateRotation = false;
         agent.updatePosition = false;
-        transform.position += new Vector3(-.3f, 0, 0);
+        animator.SetBool("Sitting", true);
     }
+
 }
