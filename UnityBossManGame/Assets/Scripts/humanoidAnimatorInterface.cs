@@ -7,7 +7,7 @@ public class humanoidAnimatorInterface : MonoBehaviour {
     private Animator myAnimator;
 	// Use this for initialization
 	void Start () {
-        myAnimator = GetComponent<Animator>();
+        myAnimator = GetComponentInChildren<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -17,13 +17,15 @@ public class humanoidAnimatorInterface : MonoBehaviour {
 
     void SteppedBack()
     {
-        Debug.Log("it worked");
+        //Debug.Log("SteppedBack");
+        //Debug.Log("it worked");
         transform.position += new Vector3(-.375f, 0, 0);
     }
 
     void SitLoop()
     {
-        switch((int)(Random.value * 5f))
+        //Debug.Log("SitLoop");
+        switch((int)(Random.value * 5f)) // 1 in 5 chance of each tap foot or cross legs
         {
             case 0:
             case 1:
@@ -39,7 +41,8 @@ public class humanoidAnimatorInterface : MonoBehaviour {
 
     void CrossedLoop()
     {
-        switch((int)(Random.value * 5f))
+        //Debug.Log("CrossedLoop");
+        switch ((int)(Random.value * 5f)) // 1 in 5 chance of uncrossing legs every cycle
         {
             case 0:
                 myAnimator.SetTrigger("uncross");
@@ -49,10 +52,22 @@ public class humanoidAnimatorInterface : MonoBehaviour {
 
     void TapLoop()
     {
-        switch((int)(Random.value * 3f))
+        //Debug.Log("TapLoop");
+        switch ((int)(Random.value * 3f)) // 1 in 3 chance to stop tapping foot every cycle
         {
             case 0:
                 myAnimator.SetTrigger("stop_tapping");
+                break;
+        }
+    }
+
+    void SwingLoop()
+    {
+        //Debug.Log("SwingLoop");
+        switch((int)(Random.value * 3f)) // 1 in 3 chance of leaving foot-swing animation, uncrossing legs.
+        {
+            case 0:
+                myAnimator.SetTrigger("uncross");
                 break;
         }
     }

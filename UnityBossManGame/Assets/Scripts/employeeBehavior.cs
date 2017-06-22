@@ -8,12 +8,14 @@ public class employeeBehavior : MonoBehaviour {
     public NavMeshAgent agent;
     public Transform target;
     public Transform lookTarget;
+    public Transform chairTarget;
 
     private bool stopped = false;
 	// Use this for initialization
 	void Start ()
     {
-        agent.SetDestination(target.position);
+        agent.isStopped = true;
+        //animator.SetBool("Walking", false);
     }
 
     // Called from the editor from the cog icon, useful for hooking up dependant scene attributes
@@ -21,8 +23,8 @@ public class employeeBehavior : MonoBehaviour {
     {
         animator = GetComponentInChildren<Animator>();
         agent = GetComponentInChildren<NavMeshAgent>();
-        Debug.Log("Resetting animator = "+ animator);
-        Debug.Assert(animator != null,"Can't find an animator attached to object");
+        Debug.Assert(animator != null,"Can't find an Animator attached to object");
+        Debug.Assert(agent != null, "Can't find a NavMeshAgent attached to object");
     }
 	
 	// Update is called once per frame
@@ -31,7 +33,7 @@ public class employeeBehavior : MonoBehaviour {
         // check to see if we have arrived at our navmesh target using a fudge factor of .75 meters to allow stopping animation
         if (!stopped)
         {
-            if (agent.remainingDistance <= agent.stoppingDistance + .75f)
+            if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 arrived();
             }
@@ -49,6 +51,7 @@ public class employeeBehavior : MonoBehaviour {
     public void DoorOpened()
     {
         Debug.Log("Door has opened");
+        agent.SetDestination(target.position);
         animator.SetBool("Walking", true);
         stopped = false;
     }
