@@ -53,8 +53,11 @@ public class employeeBehavior : MonoBehaviour {
     public void DoorOpened()
     {
         //Debug.Log("Door has opened");
-        agent.SetDestination(target.position);
+        animator.SetBool("Sitting", false);
         animator.SetBool("Walking", true);
+        agent.updatePosition = true;
+        agent.isStopped = false;
+        agent.SetDestination(target.position);
         stopped = false;
     }
 
