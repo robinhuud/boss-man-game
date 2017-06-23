@@ -4,9 +4,23 @@
 // no warranties are expressed or implied
 //
 
+/////////////////////////////////////////////////////
+// Gaze_Check.cs
+// Responsible for keeping track of where the HMD is looking,
+// and doing the following:
+// if gaze hits a collider, render a cursor object at the collision point
+// if gaze hits a collider tagged with the selectableTag string:
+//      send a message to the object helling it to highlight itself
+//      keep track of the object the gaze is hitting, and start a timer
+//      display a timer graphic around the cursor while the timer is running
+//      if the timer expires while the cursor is still on the same object
+//      call the activate method from the iDeviceControl interface on all
+//      iDeviceControl objects attached to the object
+
 using UnityEngine;
 
-// First I extend GameObject to add 3 methods:
+// First I extend GameObject to add 2 methods:
+// ActivateHighlight, and DeactivateHighlight
 // these default methods work for my custom highlight shader
 
 public static class GameObjectExtension
@@ -60,6 +74,7 @@ public class Gaze_Check : MonoBehaviour
     public float sightLength = 100f;
     public GameObject selectedObj;
     public GameObject cursor;
+    public string selectableTag = "TOUCHABLE";
     public float activation_time = 2f;
     private float selectedTime;
     private Vector3 focalPoint;
@@ -72,14 +87,7 @@ public class Gaze_Check : MonoBehaviour
     // called once on startup
     void Awake()
     {
-        // make a new shader for the selection timer
-        Shader sh = Shader.Find("Hidden/Internal-Colored");
-        lineMaterial = new Material(sh);
-        lineMaterial.hideFlags = HideFlags.HideAndDontSave;
-        lineMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        lineMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        lineMaterial.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-        lineMaterial.SetInt("_ZTest", 0);
+        makeShader();
     }
 	// Use this for initialization
 	void Start ()
@@ -111,7 +119,7 @@ public class Gaze_Check : MonoBehaviour
             focalDistance = seen.distance;
             cursor.transform.position = focalPoint;
             cursor.SetActive(true);
-            if (seen.collider.tag == "TOUCHABLE") // touchable tagged objects support highlighting
+            if (seen.collider.tag.Equals(selectableTag)) // touchable tagged objects support highlighting
             {
                 if (seen.transform.gameObject != selectedObj) // new object?
                 {
@@ -148,13 +156,13 @@ public class Gaze_Check : MonoBehaviour
             }
             else
             {
-                // Raycast returns false if we didn't hit any colliders tagged "TOUCHABLE"
+                // Raycast returns false if we didn't hit any colliders tagged with selectableTag
                 // we must tell any highlighted object to un-highlight itslef
                 if (selectedObj != null)
                 {
                     selectedObj.DeactivateHighlight();
-                    hasToggled = false;
                     waiting = false;
+                    hasToggled = false;
                     selectedObj = null;
                 }
             }
@@ -165,18 +173,30 @@ public class Gaze_Check : MonoBehaviour
             if (selectedObj != null)
             {
                 selectedObj.DeactivateHighlight();
-                hasToggled = false;
                 waiting = false;
+                hasToggled = false;
                 selectedObj = null;
             }
             cursor.SetActive(false);
         }
     }
 
+    void makeShader()
+    {
+        // make a new shader for the selection timer
+        Shader sh = Shader.Find("Hidden/Internal-Colored");
+        lineMaterial = new Material(sh);
+        lineMaterial.hideFlags = HideFlags.HideAndDontSave;
+        lineMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        lineMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        lineMaterial.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+        lineMaterial.SetInt("_ZTest", 0);
+    }
+
     void OnPostRender()
     {
         // this is where I draw my little timer clock thingy
-        // to show how long you've beel looking at a "TOUCHABLE" object
+        // to show how long you've beel looking at a selectableTag object
         float t = Time.time;
         float a, angle, x, y, z, f;
         if(waiting && t > selectedTime && t < selectedTime + activation_time)
