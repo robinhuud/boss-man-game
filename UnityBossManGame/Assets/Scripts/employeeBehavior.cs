@@ -10,7 +10,7 @@ public class employeeBehavior : MonoBehaviour {
     public Transform lookTarget;
     public Transform chairTarget;
 
-    private bool stopped = false;
+    private bool stopped = true;
     private Animator myAnimator;
     // Use this for initialization
     void Start ()
@@ -32,21 +32,14 @@ public class employeeBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        // check to see if we have arrived at our navmesh target using a fudge factor of .75 meters to allow stopping animation
-        if (!stopped)
-        {
-            if (agent.remainingDistance <= agent.stoppingDistance)
-            {
-                arrived();
-            }
-        }
+
 	}
 
     private void arrived()
     {
-        stopped = true;
         animator.SetBool("Walking", false);
-        StartCoroutine("queued_trigger");
+        agent.isStopped = true;
+        find_chair();
         Debug.Log("Arrived at destination, stopping walk cycle");    
     }
 
@@ -55,34 +48,50 @@ public class employeeBehavior : MonoBehaviour {
         //Debug.Log("Door has opened");
         animator.SetBool("Sitting", false);
         animator.SetBool("Walking", true);
-        agent.updatePosition = true;
-        agent.isStopped = false;
-        agent.SetDestination(target.position);
         stopped = false;
     }
 
-    IEnumerator queued_trigger()
+    void find_chair()
     {
-        AnimatorStateInfo a_info = animator.GetCurrentAnimatorStateInfo(0);
-        yield return new WaitForSeconds(a_info.length);
         agent.updateRotation = false;
         transform.LookAt(lookTarget);
         animator.SetTrigger("step_back");
-        while (!a_info.IsName("StepBack"))
+    }
+
+    void StandLoop()
+    {
+        Debug.Log("StandLoop");
+        if (!stopped)
         {
-            yield return null;
-            a_info = animator.GetCurrentAnimatorStateInfo(0);
+            agent.updatePosition = true;
+            agent.isStopped = false;
+            agent.SetDestination(target.position);
         }
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-        agent.updatePosition = false;
-        animator.SetBool("Sitting", true);
+        else
+        {
+            //arrived();
+        }
+    }
+
+    void WalkLoop()
+    {
+        if (!stopped)
+        {
+            stopped = true;
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                arrived();
+            }
+        }
     }
 
     void SteppedBack()
     {
-        //Debug.Log("SteppedBack");
-        //Debug.Log("it worked");
+        Debug.Log("SteppedBack");
+        animator.SetBool("Sitting", true);
+        agent.updatePosition = false;
         transform.position += new Vector3(-.375f, 0, 0);
+
     }
 
     void SitLoop()
@@ -134,4 +143,5 @@ public class employeeBehavior : MonoBehaviour {
                 break;
         }
     }
+
 }
