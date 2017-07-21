@@ -17,7 +17,8 @@ public class employeeBehavior : MonoBehaviour {
     public Transform chairTarget; // world coordinates of chair (not sure why)
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
-    private float brakingDistance = .15f; // fudge factor to trigger the stop walking animation
+    private float brakingDistance = .25f; // fudge factor to trigger the stop walking animation
+    private bool isInHall = true;
 
     // Called from the editor from the cog icon, useful for hooking up dependant scene attributes
     // in this case, that's the required public variables of Animator, and NavMeshAgent
@@ -72,8 +73,6 @@ public class employeeBehavior : MonoBehaviour {
         //Debug.Log("Door has opened at " + Time.time);
         animator.SetBool("Sitting", false);
         stopped = false;
-        agent.updateRotation = true;
-        agent.updatePosition = true;
     }
 
 
@@ -114,7 +113,19 @@ public class employeeBehavior : MonoBehaviour {
             Debug.Log("Setting destination to new walk target at " + Time.time);
             animator.SetBool("Walking", true); // should trigger state change, then StartedWalking() callback
             //agent.updatePosition = true;
-            agent.SetDestination(target.position);
+            if (isInHall)
+            {
+                agent.SetDestination(target.position);
+                isInHall = false;
+            }
+            else
+            {
+                agent.SetDestination(spawnPoint.position);
+                isInHall = true;
+            }
+            
+            agent.updateRotation = true;
+            agent.updatePosition = true;
         }
     }
 
@@ -136,6 +147,7 @@ public class employeeBehavior : MonoBehaviour {
 
     void StoppedWalking()
     {
+        agent.isStopped = true;
         Debug.Log("StoppedWalking");
     }
 
@@ -195,4 +207,11 @@ public class employeeBehavior : MonoBehaviour {
         }
     }
 
+    void FinishedFalling()
+    {
+        agent.updateRotation = true;
+        agent.updatePosition = true;
+        agent.Warp(spawnPoint.position);
+        isInHall = true;
+    }
 }

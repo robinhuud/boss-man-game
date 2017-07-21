@@ -5,6 +5,7 @@
 //
 
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
 public class ButtonControl : MonoBehaviour, IDeviceControl {
@@ -47,9 +48,17 @@ public class ButtonControl : MonoBehaviour, IDeviceControl {
         {
             //Debug.Log("was closed, setting open to true");
             controlObject.SetBool(trigger_hash, true);
+            StartCoroutine(delayToggle(10f));
         }
         isOpen = controlObject.GetBool(trigger_hash);
         au.PlayOneShot(clickSound,1f);
+    }
+
+    IEnumerator delayToggle(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GetComponent<LightButton>().activate();
+        activate();
     }
 
     public bool isActive()
