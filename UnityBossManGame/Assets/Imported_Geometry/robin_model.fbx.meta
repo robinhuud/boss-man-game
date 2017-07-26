@@ -751,7 +751,7 @@ ModelImporter:
       name: SitDown
       takeName: armatureAction
       firstFrame: 139
-      lastFrame: 219
+      lastFrame: 209
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

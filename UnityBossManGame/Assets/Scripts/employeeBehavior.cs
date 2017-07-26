@@ -59,10 +59,19 @@ public class employeeBehavior : MonoBehaviour {
 
 	}
 
+    void FixedUpdate()
+    {
+
+    }
+
+    private void LateUpdate()
+    {
+
+    }
+
     private void arrived()
     {
         Debug.Log("Arrived");
-        //animator.SetBool("Walking", false);
         agent.isStopped = true;
         find_chair();
         Debug.Log("Arrived at destination, stopping walk cycle");    
@@ -78,7 +87,7 @@ public class employeeBehavior : MonoBehaviour {
 
     void find_chair()
     {
-        //agent.updateRotation = false;
+        agent.updateRotation = false;
         //transform.LookAt(lookTarget);
         StartCoroutine(LerpTurn(transform.rotation, lookTarget, 0.5f));
     }
@@ -107,12 +116,13 @@ public class employeeBehavior : MonoBehaviour {
 
     void StandLoop()
     {
-        //Debug.Log("StandLoop");
-        if (!stopped)
+        Debug.Log("StandLoop");
+        if (!stopped) // This is the "Start Walking" case
         {
             Debug.Log("Setting destination to new walk target at " + Time.time);
             animator.SetBool("Walking", true); // should trigger state change, then StartedWalking() callback
             //agent.updatePosition = true;
+
             if (isInHall)
             {
                 agent.SetDestination(target.position);
@@ -126,11 +136,16 @@ public class employeeBehavior : MonoBehaviour {
             
             agent.updateRotation = true;
             agent.updatePosition = true;
+ 
+            //breakNow = true;
         }
     }
 
     void StartedWalking()
     {
+        //Debug.Break();
+        agent.updatePosition = true;
+        agent.updateRotation = true;
         agent.isStopped = false;
     }
 
@@ -147,16 +162,16 @@ public class employeeBehavior : MonoBehaviour {
 
     void StoppedWalking()
     {
-        agent.isStopped = true;
+        agent.isStopped = true; // turn off navigation because step back animation moves the gameobject and nav would try to move it back
         Debug.Log("StoppedWalking");
     }
 
-    void SteppedBack() // no longer used
+    void SteppedBack()
     {
         Debug.Log("SteppedBack");
+        agent.updateRotation = false;
         agent.updatePosition = false;
-        transform.position += new Vector3(-.41f, 0, .01f);
-        //agent.Warp(transform.position + new Vector3(-.41f, 0, 0));
+        transform.position += new Vector3(-.41f, 0, 0.01f);
         animator.SetBool("Sitting", true);
     }
 
