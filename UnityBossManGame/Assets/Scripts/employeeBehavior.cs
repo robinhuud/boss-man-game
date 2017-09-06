@@ -15,9 +15,10 @@ public class employeeBehavior : MonoBehaviour {
     public Transform target; // world coordinates to move toward for the NavMeshAgent
     public Transform lookTarget; // world coordinates to look toward for the animator (player's face)
     public Transform chairTarget; // world coordinates of chair (not sure why)
+    public AudioSource voiceSource; // source for voice clips, attached to same game object as the employee's head
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
-    private float brakingDistance = .25f; // fudge factor to trigger the stop walking animation
+    private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
     private bool isInHall = true;
 
     // Called from the editor from the cog icon, useful for hooking up dependant scene attributes
@@ -26,6 +27,7 @@ public class employeeBehavior : MonoBehaviour {
     {
         animator = GetComponentInChildren<Animator>();
         agent = GetComponentInChildren<NavMeshAgent>();
+        voiceSource = GetComponentInChildren<AudioSource>();
         Debug.Assert(animator != null, "Can't find an Animator attached to object, please assign it in the inspector");
         Debug.Assert(agent != null, "Can't find a NavMeshAgent attached to object, please assign it in the inspector");
     }
@@ -47,7 +49,7 @@ public class employeeBehavior : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Not complete path found");
+            Debug.Log("No complete path found");
         }
         arrived();
     }
@@ -82,6 +84,7 @@ public class employeeBehavior : MonoBehaviour {
         //Debug.Log("Door has opened at " + Time.time);
         animator.SetBool("Sitting", false);
         stopped = false;
+        StartCoroutine(WaitToTalk(7.0f, voiceSource.clip));
     }
 
 
@@ -108,12 +111,27 @@ public class employeeBehavior : MonoBehaviour {
         ready_to_sit();
     }
 
+    IEnumerator WaitToTalk(float duration, AudioClip clip)
+    {
+        float startTime = Time.time;
+        while(Time.time < startTime + duration)
+        {
+            yield return null;
+        }
+        voiceSource.PlayOneShot(clip);
+    }
+
     void ready_to_sit()
     {
         animator.SetTrigger("step_back");
+        agent.updateRotation = false;
+        agent.updatePosition = false;
         //animator.SetBool("Sitting", true);
     }
 
+
+    // All of these functions are called by the animator based on events in the various timelines of the animation clips
+    // these are used to string animations together, and trigger other events
     void StandLoop()
     {
         Debug.Log("StandLoop");
@@ -134,8 +152,8 @@ public class employeeBehavior : MonoBehaviour {
                 isInHall = true;
             }
             
-            agent.updateRotation = true;
-            agent.updatePosition = true;
+            //agent.updateRotation = true;
+            //agent.updatePosition = true;
  
             //breakNow = true;
         }
@@ -169,8 +187,6 @@ public class employeeBehavior : MonoBehaviour {
     void SteppedBack()
     {
         Debug.Log("SteppedBack");
-        agent.updateRotation = false;
-        agent.updatePosition = false;
         transform.position += new Vector3(-.41f, 0, 0.01f);
         animator.SetBool("Sitting", true);
     }

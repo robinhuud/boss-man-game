@@ -4,6 +4,11 @@
 // no warranties are expressed or implied
 //
 
+
+// This is an extension of IDeviceControl, (The base class that enables
+// the gaze-selection methods of "activate()" and "isActive()"
+// This version is a oneshot version that takes an animator, and calls a "trigger"
+
 using UnityEngine;
 
 public class TriggerButton : MonoBehaviour, IDeviceControl
