@@ -60,4 +60,5 @@ _ReSharper*/
 
 #Ignore .keystore files
 *.keystore
+.vs/*
 
