@@ -49,6 +49,7 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+.vs/*
 [Bb]in
 [Dd]ebug*/
 *.lib
@@ -60,5 +61,3 @@ _ReSharper*/
 
 #Ignore .keystore files
 *.keystore
-.vs/*
-
