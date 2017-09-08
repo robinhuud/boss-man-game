@@ -24,7 +24,7 @@ public class RoomAnimationController : MonoBehaviour {
     // Animation Events
     void Contact () // called when the door open animation is at contact point
     {
-        Debug.Log("Contact");
+        //Debug.Log("Contact");
         if(animator.GetBool("open_door")) // if the animation is playing backwards, we play the close sound instead of the open sound.
         {
             audioSource.PlayOneShot(doorOpenSound);
