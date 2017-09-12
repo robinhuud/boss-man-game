@@ -49,7 +49,7 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
-.vs/*
+*/.vs/*
 [Bb]in
 [Dd]ebug*/
 *.lib
