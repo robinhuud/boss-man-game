@@ -14,12 +14,13 @@ public class employeeBehavior : MonoBehaviour {
     public Transform spawnPoint; // world coordinates of the spawn point (and reset point) of the employee
     public Transform target; // world coordinates to move toward for the NavMeshAgent
     public Transform lookTarget; // world coordinates to look toward for the animator (player's face)
-    public Transform chairTarget; // world coordinates of chair (not sure why)
+    public Transform benchTarget; // world coordinates of benchfor hallway navigation.
     public AudioSource voiceSource; // source for voice clips, attached to same game object as the employee's head
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
     private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
     private bool isInHall = true;
+    private bool playedWelcome = false;
 
     // Called from the editor from the cog icon, useful for hooking up dependant scene attributes
     // in this case, that's the required public variables of Animator, and NavMeshAgent
@@ -41,11 +42,11 @@ public class employeeBehavior : MonoBehaviour {
         // prepare the NavMeshAgent
         Debug.Assert(agent.isOnNavMesh, "NavMeshAgent is not attached to a navmesh");
         NavMeshPath path = new NavMeshPath();
-        agent.CalculatePath(spawnPoint.position, path);
+        agent.CalculatePath(benchTarget.position, path);
         if(path.status == NavMeshPathStatus.PathComplete)
         {
-            Debug.Log("Complete Path found.");
-            agent.Warp(spawnPoint.position);
+            //Debug.Log("Complete Path found.");
+            agent.Warp(benchTarget.position);
         }
         else
         {
@@ -73,18 +74,22 @@ public class employeeBehavior : MonoBehaviour {
 
     private void arrived()
     {
-        Debug.Log("Arrived");
+        //Debug.Log("Arrived");
         agent.isStopped = true;
         find_chair();
-        Debug.Log("Arrived at destination, stopping walk cycle");    
+        //Debug.Log("Arrived at destination, stopping walk cycle");    
     }
 
     public void DoorOpened()
     {
+        // this is called when the door has opened, 
         //Debug.Log("Door has opened at " + Time.time);
         animator.SetBool("Sitting", false);
         stopped = false;
-        StartCoroutine(WaitToTalk(7.0f, voiceSource.clip));
+        if(!playedWelcome)
+        {
+            StartCoroutine(WaitToTalk(7.0f, voiceSource.clip));
+        }
     }
 
 
@@ -119,6 +124,7 @@ public class employeeBehavior : MonoBehaviour {
             yield return null;
         }
         voiceSource.PlayOneShot(clip);
+        playedWelcome = true;
     }
 
     void ready_to_sit()
@@ -129,15 +135,15 @@ public class employeeBehavior : MonoBehaviour {
         //animator.SetBool("Sitting", true);
     }
 
-
     // All of these functions are called by the animator based on events in the various timelines of the animation clips
     // these are used to string animations together, and trigger other events
     void StandLoop()
     {
-        Debug.Log("StandLoop");
+        // This is the moment when we decide whether we should start walking or just continue to stand
+        //Debug.Log("StandLoop");
         if (!stopped) // This is the "Start Walking" case
         {
-            Debug.Log("Setting destination to new walk target at " + Time.time);
+            //Debug.Log("Setting destination to new walk target at " + Time.time);
             animator.SetBool("Walking", true); // should trigger state change, then StartedWalking() callback
             //agent.updatePosition = true;
 
@@ -148,7 +154,7 @@ public class employeeBehavior : MonoBehaviour {
             }
             else
             {
-                agent.SetDestination(spawnPoint.position);
+                agent.SetDestination(benchTarget.position);
                 isInHall = true;
             }
             
@@ -162,6 +168,7 @@ public class employeeBehavior : MonoBehaviour {
     void StartedWalking()
     {
         //Debug.Break();
+        // Turns on the Nav mesh agent which takes over the root motion.
         agent.updatePosition = true;
         agent.updateRotation = true;
         agent.isStopped = false;
@@ -169,9 +176,10 @@ public class employeeBehavior : MonoBehaviour {
 
     void WalkLoop()
     {
+        // after each step we check to see if we are close enough to the destinatiopn to trigger the stop walking animation transition.
         if (!stopped && agent.remainingDistance <= agent.stoppingDistance + brakingDistance)
         {
-            Debug.Log("Walk Loop at destination, stop walking at " + Time.time);
+            //Debug.Log("Walk Loop at destination, stop walking at " + Time.time);
             animator.SetBool("Walking", false); // should trigger state transition, then StoppedWalking() callback
             stopped = true;
             arrived();
@@ -180,20 +188,22 @@ public class employeeBehavior : MonoBehaviour {
 
     void StoppedWalking()
     {
-        agent.isStopped = true; // turn off navigation because step back animation moves the gameobject and nav would try to move it back
-        Debug.Log("StoppedWalking");
+        // turn off navigation because step back animation moves the gameobject and nav would try to move it back
+        agent.isStopped = true; 
+        //Debug.Log("StoppedWalking");
     }
 
     void SteppedBack()
     {
-        Debug.Log("SteppedBack");
+        // After we step back toward the chair, we must trigger the sitting animation.
+        //Debug.Log("SteppedBack");
         transform.position += new Vector3(-.41f, 0, 0.01f);
         animator.SetBool("Sitting", true);
     }
 
     void SitLoop()
     {
-        //Debug.Log("SitLoop");
+        // every time we finish a loop animation, we pick what to do next randomly
         switch ((int)(Random.value * 3f)) // 1 in 5 chance of each tap foot or cross legs
         {
             case 0:
@@ -207,7 +217,7 @@ public class employeeBehavior : MonoBehaviour {
 
     void CrossedLoop()
     {
-        //Debug.Log("CrossedLoop");
+        // every time we finish a loop animation, we pick what to do next randomly
         switch ((int)(Random.value * 6f)) // 1 in 5 chance of uncrossing legs every cycle
         {
             case 0:
@@ -218,7 +228,7 @@ public class employeeBehavior : MonoBehaviour {
 
     void TapLoop()
     {
-        //Debug.Log("TapLoop");
+        // every time we finish a loop animation, we pick what to do next randomly
         switch ((int)(Random.value * 4f)) // 1 in 3 chance to stop tapping foot every cycle
         {
             case 0:
@@ -229,7 +239,7 @@ public class employeeBehavior : MonoBehaviour {
 
     void SwingLoop()
     {
-        //Debug.Log("SwingLoop");
+        // every time we finish a loop animation, we pick what to do next randomly
         switch ((int)(Random.value * 4f)) // 1 in 3 chance of leaving foot-swing animation, uncrossing legs.
         {
             case 0:
@@ -243,6 +253,7 @@ public class employeeBehavior : MonoBehaviour {
         agent.updateRotation = true;
         agent.updatePosition = true;
         agent.Warp(spawnPoint.position);
+        agent.SetDestination(benchTarget.position);
         isInHall = true;
     }
 }

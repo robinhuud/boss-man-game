@@ -29,6 +29,8 @@ namespace AudioVisualizer
         public float lerpSpeed = 10f;
         [Tooltip("If true, objects rotate around their local positions \nIf false, they use this object as a pivot point")]
         public bool localRotation = true;
+        [Tooltip("If true, rotation of object get reset every frame by an animator so direct setting of rotation instead of deltas is required, and processing happens in LateUpdate instead of Update method")]
+        public bool overrideAnimator = false;
         [Tooltip("If true, each object will have a unique random rotation axis")]
         public bool randomAxis = false;
         [Tooltip("Sample from a recorded AudioFile?")]
@@ -53,7 +55,18 @@ namespace AudioVisualizer
 
         void Update()
         {
-            RotateObjects();
+            if (!overrideAnimator)
+            {
+                RotateObjects();
+            }
+        }
+
+        void LateUpdate()
+        {
+            if(overrideAnimator)
+            {
+                RotateObjects();
+            }
         }
 
         //________ Public Methods ________
@@ -82,7 +95,7 @@ namespace AudioVisualizer
             //see how much we lerped by
             float delta = newAngle - currentAngle;
             currentAngle = newAngle;
-            
+            //Debug.Log(desiredAngle + " vs " + delta);
 
             for (int i = 0; i < objects.Count; i++)
             {
@@ -90,11 +103,25 @@ namespace AudioVisualizer
                 Vector3 axis = randomAxis ? randomAxes[i] : rotationAxis;
                 if (localRotation)
                 {
-                    go.transform.Rotate(axis, delta);
+                    if(overrideAnimator)
+                    {
+                        go.transform.Rotate(axis, desiredAngle);
+                    }
+                    else
+                    {
+                        go.transform.Rotate(axis, delta);
+                    }
                 }
                 else
                 {
-                    go.transform.RotateAround(this.transform.position, axis, delta);
+                    if(overrideAnimator)
+                    {
+                        go.transform.RotateAround(this.transform.position, axis, desiredAngle);
+                    }
+                    else
+                    {
+                        go.transform.RotateAround(this.transform.position, axis, delta);
+                    }
                 }
             }
 

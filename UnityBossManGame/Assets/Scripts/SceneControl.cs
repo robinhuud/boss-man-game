@@ -4,6 +4,9 @@
 // no warranties are expressed or implied
 //
 
+// this script does only one thing, it forwards the message that the door 
+// opened to the employeeBehavior instance referenced in the public variable
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,11 +32,20 @@ public class SceneControl : MonoBehaviour {
     }
 
     // Need to define an interface for this?? WTF??
-    public void react(LightButton caller)
+    public void react(IDeviceControl caller, string command)
     {
-        if (caller.GetComponentInParent<MonoBehaviour>().name.Equals("Door") && caller.isActive()) // isActive gets set before we check it
+        switch(command)
         {
-            employeeScript.DoorOpened();
+            case "door":
+                if(caller.isActive())
+                {
+                    employeeScript.DoorOpened();
+                }
+                break;
+            case "trapdoor":
+                break;
+            default:
+                break;
         }
     }
 }

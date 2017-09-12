@@ -13,7 +13,6 @@ public class RoomAnimationController : MonoBehaviour {
     void Start () {
         animator = GetComponentInChildren<Animator>();
         audioSource = animator.gameObject.GetComponent<AudioSource>();
-
     }
 	
 	// Update is called once per frame

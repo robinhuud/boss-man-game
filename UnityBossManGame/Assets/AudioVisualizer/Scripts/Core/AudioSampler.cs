@@ -152,7 +152,7 @@ namespace AudioVisualizer
                     int spacing = (int)(width / debugLables.Count);
                     int barWidth = 10;
                     int yBottom = height - headerFooter;
-                    int yTop = headerFooter;
+                    //int yTop = headerFooter;
                     int indent = 40; //left indent
 
                     GUI.color = Color.white;
@@ -447,7 +447,7 @@ namespace AudioVisualizer
                 }
                 int n1 = (int)Mathf.Floor(fLow * samplesToTake / fMax);
                 int n2 = (int)Mathf.Floor(fHigh * samplesToTake / fMax);
-                float sum = 0;
+                //float sum = 0;
                 // Debug.Log("Smapling freq: " + n1 + "-" + n2);
                 // average the volumes of frequencies fLow to fHigh
 
@@ -495,7 +495,7 @@ namespace AudioVisualizer
             }
             int n1 = (int)Mathf.Floor(fLow * samplesToTake / fMax);
             int n2 = (int)Mathf.Floor(fHigh * samplesToTake / fMax);
-            float sum = 0;
+            //float sum = 0;
             //Debug.Log("Sampling freq: " + n1 + "-" + n2);
             // average the volumes of frequencies fLow to fHigh
 
@@ -556,7 +556,7 @@ namespace AudioVisualizer
             // if numBins is < input.Length, downsample the input.
             if (numBins < input.Length)
             {
-                int inputsToSkip = input.Length - numBins;
+                //int inputsToSkip = input.Length - numBins;
                 for (int b = 0; b < numBins; b++)
                 { 
                     output[b] = input[b];

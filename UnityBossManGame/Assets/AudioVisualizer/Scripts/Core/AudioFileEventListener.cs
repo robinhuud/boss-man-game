@@ -24,7 +24,7 @@ namespace AudioVisualizer
         public delegate void BeatEvent(Beat b);
         public static BeatEvent OnBeatRecognized;
 
-        float timer = 0;
+        //float timer = 0;
         float nextBeatTime = 0;
         float lastLooptime = 0;
         int beatIndex = 0;

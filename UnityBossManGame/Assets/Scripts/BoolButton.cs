@@ -8,7 +8,6 @@
 // to trigger an event instead use TriggerButton
 
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
 public class BoolButton : MonoBehaviour, IDeviceControl {

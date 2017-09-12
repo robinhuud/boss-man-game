@@ -60,8 +60,8 @@ namespace AudioVisualizer
         // public DebugChart avgChart;
 
         private bool canDetect = true; // flag indicating if we can detect another beat or not
-        private float lastFreq = 0; // the frequency of the last detected beat
-        private float lastVariance = 0;// the variance of the last frame
+        //private float lastFreq = 0; // the frequency of the last detected beat
+        //private float lastVariance = 0;// the variance of the last frame
         private float[] sampleBuffer; //buffers the audio samples taken
         private int index = 0; // our index into the sample buffer.
         float avgEnergy; // compute the current average
@@ -228,8 +228,8 @@ namespace AudioVisualizer
             {
                 //Debug.Log("\n Beat Detected, (" + freq + " > " + beatThreshold*avgEnergy + " ) \n");
                 canDetect = false; //reset the flag. we can't detect another beat, until freq drops below 'lastFreq'
-                lastFreq = frequency;  //record the frequency of the last beat
-                lastVariance = varyPercent; // record the variancePercent of the last beat
+                //lastFreq = frequency;  //record the frequency of the last beat
+                //lastVariance = varyPercent; // record the variancePercent of the last beat
                 
                 float deltaTime = audioTime - lastBeatTime;
                 if (deltaTime < beatLimiter)
