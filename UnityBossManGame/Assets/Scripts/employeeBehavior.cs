@@ -250,9 +250,9 @@ public class employeeBehavior : MonoBehaviour {
 
     void FinishedFalling()
     {
-        agent.updateRotation = true;
-        agent.updatePosition = true;
+        stopped = false;
         agent.Warp(spawnPoint.position);
+        animator.SetBool("Walking", true);
         agent.SetDestination(benchTarget.position);
         isInHall = true;
     }
