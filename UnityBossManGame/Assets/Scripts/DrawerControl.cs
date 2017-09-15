@@ -27,6 +27,7 @@ public class DrawerControl : MonoBehaviour, IDeviceControl {
             //Debug.Log("isOpen is " + isOpen);
         }
         au = GetComponent<AudioSource>();
+        Debug.Assert(au != null, "audiosource not connected to script");
     }
 
     // Update is called once per frame
