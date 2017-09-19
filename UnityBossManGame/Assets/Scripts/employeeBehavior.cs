@@ -197,14 +197,18 @@ public class employeeBehavior : MonoBehaviour {
     {
         // After we step back toward the chair, we must trigger the sitting animation.
         //Debug.Log("SteppedBack");
-        transform.position += new Vector3(-.41f, 0, 0.01f);
+        transform.position += new Vector3(-.41f, 0, 0.01f); // offset to get employee into correct position for sitting down to land his butt in the chair.
         animator.SetBool("Sitting", true);
     }
+
+	void SatDown()
+	{
+	}
 
     void SitLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 3f)) // 1 in 5 chance of each tap foot or cross legs
+        switch ((int)(Random.value * 3f)) // 1 in 3 chance of each tap foot or cross legs
         {
             case 0:
                 animator.SetTrigger("tap_foot");
@@ -215,10 +219,10 @@ public class employeeBehavior : MonoBehaviour {
         }
     }
 
-    void CrossedLoop()
+    void CrossedLegs()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 6f)) // 1 in 5 chance of uncrossing legs every cycle
+        switch ((int)(Random.value * 5f)) // 1 in 5 chance of uncrossing legs immediately instead of swinging foot
         {
             case 0:
                 animator.SetTrigger("uncross");
@@ -229,7 +233,7 @@ public class employeeBehavior : MonoBehaviour {
     void TapLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 4f)) // 1 in 3 chance to stop tapping foot every cycle
+        switch ((int)(Random.value * 4f)) // 1 in 4 chance to stop tapping foot every cycle
         {
             case 0:
                 animator.SetTrigger("stop_tapping");
@@ -240,7 +244,7 @@ public class employeeBehavior : MonoBehaviour {
     void SwingLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 4f)) // 1 in 3 chance of leaving foot-swing animation, uncrossing legs.
+        switch ((int)(Random.value * 4f)) // 1 in 4 chance of leaving foot-swing animation, uncrossing legs.
         {
             case 0:
                 animator.SetTrigger("uncross");
