@@ -203,6 +203,7 @@ public class employeeBehavior : MonoBehaviour {
 
 	void SatDown()
 	{
+        animator.SetTrigger("gesture_wide");
 	}
 
     void SitLoop()
@@ -250,6 +251,11 @@ public class employeeBehavior : MonoBehaviour {
                 animator.SetTrigger("uncross");
                 break;
         }
+    }
+
+    void UncrossedLegs()
+    {
+        animator.SetTrigger("gesture_inward");
     }
 
     void FinishedFalling()
