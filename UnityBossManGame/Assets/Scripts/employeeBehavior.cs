@@ -15,12 +15,15 @@ public class employeeBehavior : MonoBehaviour {
     public Transform target; // world coordinates to move toward for the NavMeshAgent
     public Transform lookTarget; // world coordinates to look toward for the animator (player's face)
     public Transform benchTarget; // world coordinates of benchfor hallway navigation.
+    public Transform headBone; // the head bone object container
     public AudioSource voiceSource; // source for voice clips, attached to same game object as the employee's head
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
     private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
     private bool isInHall = true;
     private bool playedWelcome = false;
+    private bool staring = false;
+
 
     // Called from the editor from the cog icon, useful for hooking up dependant scene attributes
     // in this case, that's the required public variables of Animator, and NavMeshAgent
@@ -29,6 +32,7 @@ public class employeeBehavior : MonoBehaviour {
         animator = GetComponentInChildren<Animator>();
         agent = GetComponentInChildren<NavMeshAgent>();
         voiceSource = GetComponentInChildren<AudioSource>();
+
         Debug.Assert(animator != null, "Can't find an Animator attached to object, please assign it in the inspector");
         Debug.Assert(agent != null, "Can't find a NavMeshAgent attached to object, please assign it in the inspector");
     }
@@ -52,31 +56,53 @@ public class employeeBehavior : MonoBehaviour {
         {
             Debug.Log("No complete path found");
         }
-        arrived();
+        // Tell the NavMeshAgent that we are ready to go.
+        ArrivedNearChair();
     }
 
 	
-	// Update is called once per frame
+	// Update is called once per rendered frame
 	void Update ()
     {
 
 	}
 
+    // FixedUpdate is called once per simulation tick (fixed frame rate)
     void FixedUpdate()
     {
 
     }
 
+    // Called after Update() is done
     private void LateUpdate()
     {
-
+        // Let's get the head pointed toward the viewer
+        if(staring)
+        {
+            staring = false;
+            StartCoroutine(StareAt(headBone.rotation, lookTarget, 0.5f));
+        }
     }
 
-    private void arrived()
+    private void StareAtTarget(Transform target)
+    {
+        /*
+        // must be called from LateUpdate every frame in  order to work.
+        // point the bone at the target.
+        headBone.LookAt(lookTarget);
+        // counteract the fact of my wacky-oriented skeleton bones.
+        headBone.Rotate(Vector3.forward, -90);
+        */
+        // is it still in the LateUpdate phase?
+        StartCoroutine(StareAt(headBone.rotation, target, .5f));
+    }
+
+    // employee has arrived at it's destination, it will look for a chair to sit down if possible.
+    private void ArrivedNearChair()
     {
         //Debug.Log("Arrived");
         agent.isStopped = true;
-        find_chair();
+        FindChair();
         //Debug.Log("Arrived at destination, stopping walk cycle");    
     }
 
@@ -88,18 +114,22 @@ public class employeeBehavior : MonoBehaviour {
         stopped = false;
         if(!playedWelcome)
         {
-            StartCoroutine(WaitToTalk(7.0f, voiceSource.clip));
+            StartCoroutine(WaitToTalk(5.0f, voiceSource.clip));
         }
     }
 
 
-    void find_chair()
+    void FindChair()
     {
+        // Prevent the NavMeshAgent from overriding our rotation.
         agent.updateRotation = false;
-        //transform.LookAt(lookTarget);
+        // The assumption is that the chair will be facing toward the lookTarget, so facing that way
+        // will align us with the chair. In order for this to work, the walkTarget must be  directly
+        // in front of the chair in the direction of the lookTarget
         StartCoroutine(LerpTurn(transform.rotation, lookTarget, 0.5f));
     }
 
+    // Slowly turns object toward target over duration seconds, then calls ready_to_sit
     IEnumerator LerpTurn(Quaternion startRotation, Transform target, float duration)
     {
         float startTime = Time.time;
@@ -113,7 +143,22 @@ public class employeeBehavior : MonoBehaviour {
             transform.localRotation = Quaternion.Slerp(startRotation, destinationRotation, fraction);
             yield return null;
         }
-        ready_to_sit();
+        ReadyToSit();
+    }
+
+    IEnumerator StareAt(Quaternion startRotation, Transform target, float duration)
+    {
+        float startTime = Time.time;
+        float thisTime = startTime;
+        float fraction = 0;
+        Quaternion destinationRotation = Quaternion.LookRotation(new Vector3(target.position.x - headBone.position.x, target.position.y - headBone.position.y, target.position.z - headBone.position.z));
+        while (thisTime < startTime + duration + Time.deltaTime)
+        {
+            thisTime += Time.deltaTime;
+            fraction = (thisTime - startTime) / duration;
+            headBone.localRotation = Quaternion.Slerp(startRotation, destinationRotation, fraction);
+            yield return null;
+        }
     }
 
     IEnumerator WaitToTalk(float duration, AudioClip clip)
@@ -127,16 +172,28 @@ public class employeeBehavior : MonoBehaviour {
         playedWelcome = true;
     }
 
-    void ready_to_sit()
+    void ReadyToSit()
     {
         animator.SetTrigger("step_back");
-        agent.updateRotation = false;
+        // Prevent the navmeshagent from messing up our step-back animation
         agent.updatePosition = false;
-        //animator.SetBool("Sitting", true);
     }
 
     // All of these functions are called by the animator based on events in the various timelines of the animation clips
     // these are used to string animations together, and trigger other events
+
+
+    // This is called by the animator after the "step_back" trigger has finished.
+    // In order for this to work the NavMeshAgent must have it's updatePosition set to false for at least one frame
+    // so it is set in the ready_to_sit() method.
+    void SteppedBack()
+    {
+        // After we step back toward the chair, we must trigger the sitting animation.
+        transform.position += new Vector3(-.41f, 0, 0.01f); // offset to get employee into correct position for sitting down to land his butt in the chair.
+        // After we step back toward the chair, we must trigger the sitting animation.
+        animator.SetBool("Sitting", true);
+    }
+
     void StandLoop()
     {
         // This is the moment when we decide whether we should start walking or just continue to stand
@@ -157,17 +214,11 @@ public class employeeBehavior : MonoBehaviour {
                 agent.SetDestination(benchTarget.position);
                 isInHall = true;
             }
-            
-            //agent.updateRotation = true;
-            //agent.updatePosition = true;
- 
-            //breakNow = true;
         }
     }
 
     void StartedWalking()
     {
-        //Debug.Break();
         // Turns on the Nav mesh agent which takes over the root motion.
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -182,7 +233,7 @@ public class employeeBehavior : MonoBehaviour {
             //Debug.Log("Walk Loop at destination, stop walking at " + Time.time);
             animator.SetBool("Walking", false); // should trigger state transition, then StoppedWalking() callback
             stopped = true;
-            arrived();
+            ArrivedNearChair();
         }
     }
 
@@ -193,29 +244,26 @@ public class employeeBehavior : MonoBehaviour {
         //Debug.Log("StoppedWalking");
     }
 
-    void SteppedBack()
-    {
-        // After we step back toward the chair, we must trigger the sitting animation.
-        //Debug.Log("SteppedBack");
-        transform.position += new Vector3(-.41f, 0, 0.01f); // offset to get employee into correct position for sitting down to land his butt in the chair.
-        animator.SetBool("Sitting", true);
-    }
-
 	void SatDown()
 	{
-        animator.SetTrigger("gesture_wide");
+        // Just string the next animation clip, which will start calling SitLoop() after each cycle
+        //animator.SetTrigger("gesture_wide");
 	}
 
     void SitLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 3f)) // 1 in 3 chance of each tap foot or cross legs
+        switch ((int)(Random.value * 6f)) // 1 in 3 chance of each tap foot or cross legs
         {
             case 0:
                 animator.SetTrigger("tap_foot");
                 break;
             case 1:
                 animator.SetTrigger("cross_legs");
+                break;
+            case 2:
+                staring = false;
+                // In this case we just stay in the same loop, and continue to sit
                 break;
         }
     }
@@ -255,7 +303,8 @@ public class employeeBehavior : MonoBehaviour {
 
     void UncrossedLegs()
     {
-        animator.SetTrigger("gesture_inward");
+        //animator.SetTrigger("gesture_inward");
+        staring = true;
     }
 
     void FinishedFalling()
