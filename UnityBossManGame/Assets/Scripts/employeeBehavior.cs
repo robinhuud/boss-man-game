@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 /// <summary>
 /// Coordinates and controls the NavMeshAgent and the Animator
 /// 
@@ -17,6 +18,11 @@ public class employeeBehavior : MonoBehaviour {
     public Transform benchTarget; // world coordinates of benchfor hallway navigation.
     public Transform headBone; // the head bone object container
     public AudioSource voiceSource; // source for voice clips, attached to same game object as the employee's head
+    [SerializeField]
+    public AudioClip[] speechClips;
+    public AudioSource screamSource; // separate source for the screams, dont really need it but it makes the mixing easier
+    [SerializeField]
+    public AudioClip[] fallingClips; // set of clips for falling sounds
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
     private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
@@ -24,6 +30,7 @@ public class employeeBehavior : MonoBehaviour {
     private bool playedWelcome = false;
     private bool staring = false;
 
+    private static System.Random random = new System.Random();
 
     // Called from the editor from the cog icon, useful for hooking up dependant scene attributes
     // in this case, that's the required public variables of Animator, and NavMeshAgent
@@ -114,7 +121,7 @@ public class employeeBehavior : MonoBehaviour {
         stopped = false;
         if(!playedWelcome)
         {
-            StartCoroutine(WaitToTalk(5.0f, voiceSource.clip));
+            StartCoroutine(WaitToTalk(5.0f, speechClips[0]));
         }
     }
 
@@ -253,7 +260,7 @@ public class employeeBehavior : MonoBehaviour {
     void SitLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 6f)) // 1 in 3 chance of each tap foot or cross legs
+        switch (random.Next(0,5)) // 1 in 3 chance of each tap foot or cross legs
         {
             case 0:
                 animator.SetTrigger("tap_foot");
@@ -271,7 +278,7 @@ public class employeeBehavior : MonoBehaviour {
     void CrossedLegs()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 5f)) // 1 in 5 chance of uncrossing legs immediately instead of swinging foot
+        switch (random.Next(0,4)) // 1 in 5 chance of uncrossing legs immediately instead of swinging foot
         {
             case 0:
                 animator.SetTrigger("uncross");
@@ -282,7 +289,7 @@ public class employeeBehavior : MonoBehaviour {
     void TapLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 4f)) // 1 in 4 chance to stop tapping foot every cycle
+        switch (random.Next(0, 1)) // 1 in 2 chance to stop tapping foot every cycle
         {
             case 0:
                 animator.SetTrigger("stop_tapping");
@@ -293,7 +300,7 @@ public class employeeBehavior : MonoBehaviour {
     void SwingLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch ((int)(Random.value * 4f)) // 1 in 4 chance of leaving foot-swing animation, uncrossing legs.
+        switch (random.Next(0, 3)) // 1 in 4 chance of leaving foot-swing animation, uncrossing legs.
         {
             case 0:
                 animator.SetTrigger("uncross");
@@ -305,6 +312,12 @@ public class employeeBehavior : MonoBehaviour {
     {
         //animator.SetTrigger("gesture_inward");
         staring = true;
+    }
+
+    void NoticedFalling()
+    {
+        AudioClip clip = fallingClips[random.Next(0, fallingClips.Length-1)];
+        screamSource.PlayOneShot(clip);
     }
 
     void FinishedFalling()
