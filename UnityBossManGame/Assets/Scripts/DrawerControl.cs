@@ -35,7 +35,7 @@ public class DrawerControl : MonoBehaviour, IDeviceControl {
 		
 	}
 
-    public void activate()
+    public void Activate()
     {
         if (isOpen)
         {
@@ -52,7 +52,7 @@ public class DrawerControl : MonoBehaviour, IDeviceControl {
         isOpen = controlObject.GetBool(trigger_name);
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return isOpen;
     }

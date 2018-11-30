@@ -47,6 +47,7 @@ public class employeeBehavior : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        // Debug.Log("TRACE: Start method");
         // make sure we have our scene references
         Debug.Assert(animator != null, "No Animator assigned, cannot continue.");
         Debug.Assert(agent != null, "No NavMeshAgent assigned, cannot continue.");
@@ -89,19 +90,6 @@ public class employeeBehavior : MonoBehaviour {
             staring = false;
             StartCoroutine(StareAt(headBone.rotation, lookTarget, 0.5f));
         }
-    }
-
-    private void StareAtTarget(Transform target)
-    {
-        /*
-        // must be called from LateUpdate every frame in  order to work.
-        // point the bone at the target.
-        headBone.LookAt(lookTarget);
-        // counteract the fact of my wacky-oriented skeleton bones.
-        headBone.Rotate(Vector3.forward, -90);
-        */
-        // is it still in the LateUpdate phase?
-        StartCoroutine(StareAt(headBone.rotation, target, .5f));
     }
 
     // employee has arrived at it's destination, it will look for a chair to sit down if possible.

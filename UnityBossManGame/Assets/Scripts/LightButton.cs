@@ -24,7 +24,7 @@ public class LightButton : MonoBehaviour, IDeviceControl {
 	
 	}
 
-    public void activate()
+    public void Activate()
     {
         isOn = !isOn;
         if(isOn)
@@ -37,7 +37,7 @@ public class LightButton : MonoBehaviour, IDeviceControl {
         }
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return isOn;
     }

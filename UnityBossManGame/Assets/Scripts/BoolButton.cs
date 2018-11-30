@@ -39,13 +39,13 @@ public class BoolButton : MonoBehaviour, IDeviceControl {
 	
 	}
 
-    public void activate()
+    public void Activate()
     {
         controlObject.SetBool(boolHash, !controlObject.GetBool(boolHash));
         au.PlayOneShot(clickSound,1f);
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return isOpen;
     }

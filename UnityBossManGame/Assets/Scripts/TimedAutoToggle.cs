@@ -17,9 +17,9 @@ public class TimedAutoToggle : MonoBehaviour, IDeviceControl {
 		
 	}
 
-    public void activate()
+    public void Activate()
     {
-        if(!isActive())
+        if(!IsActive())
         {
             timer = activateAfter(delay);
             StartCoroutine(timer);
@@ -31,7 +31,7 @@ public class TimedAutoToggle : MonoBehaviour, IDeviceControl {
         }
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return timerRunning;
     }
@@ -42,7 +42,7 @@ public class TimedAutoToggle : MonoBehaviour, IDeviceControl {
         yield return new WaitForSeconds(time);
         foreach (IDeviceControl id in idc)
         {
-            id.activate();
+            id.Activate();
         }
         timerRunning = false;
     }

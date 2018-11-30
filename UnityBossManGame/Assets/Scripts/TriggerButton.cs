@@ -35,12 +35,12 @@ public class TriggerButton : MonoBehaviour, IDeviceControl
 		
 	}
 
-    public void activate()
+    public void Activate()
     {
         controlObject.SetTrigger(trigger_hash);
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return false;
     }

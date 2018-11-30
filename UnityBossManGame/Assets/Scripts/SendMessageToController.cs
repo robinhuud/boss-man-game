@@ -22,7 +22,7 @@ public class SendMessageToController : MonoBehaviour , IDeviceControl {
 		
 	}
 
-    public void activate()
+    public void Activate()
     {
         active = !active;
         if(active || !toggle)
@@ -31,7 +31,7 @@ public class SendMessageToController : MonoBehaviour , IDeviceControl {
         }
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return active;
     }

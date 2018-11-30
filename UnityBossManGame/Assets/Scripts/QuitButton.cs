@@ -33,7 +33,7 @@ public class QuitButton : MonoBehaviour, IDeviceControl {
 		
 	}
 
-    public void activate()
+    public void Activate()
     {
         //Debug.Log("QUITTING!!");
         if(!confirming)
@@ -43,7 +43,7 @@ public class QuitButton : MonoBehaviour, IDeviceControl {
         }
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return confirming;
     }

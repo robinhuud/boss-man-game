@@ -18,13 +18,13 @@ public class ConfirmQuitButton : MonoBehaviour, IDeviceControl {
 		
 	}
 
-    public void activate()
+    public void Activate()
     {
         Debug.Log("Called activate on quit confirmation, quitting.");
         Application.Quit();
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return true;
     }

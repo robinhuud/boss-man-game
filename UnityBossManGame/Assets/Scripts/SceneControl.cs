@@ -37,10 +37,7 @@ public class SceneControl : MonoBehaviour {
         switch(command)
         {
             case "door":
-                if(caller.isActive())
-                {
-                    employeeScript.DoorOpened();
-                }
+                employeeScript.DoorOpened();
                 break;
             case "trapdoor":
                 break;

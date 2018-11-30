@@ -22,7 +22,7 @@ public class LightControl : MonoBehaviour, IDeviceControl {
         au = GetComponent<AudioSource>();
     }
 	
-    public void activate()
+    public void Activate()
     {
         if(isOn)
         {
@@ -35,7 +35,7 @@ public class LightControl : MonoBehaviour, IDeviceControl {
         au.PlayOneShot(clickSound, 1f);
     }
 
-    public bool isActive()
+    public bool IsActive()
     {
         return isOn;
     }

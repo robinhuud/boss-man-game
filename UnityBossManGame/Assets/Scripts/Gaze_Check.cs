@@ -142,7 +142,7 @@ public class Gaze_Check : MonoBehaviour
                         {
                             foreach(IDeviceControl dc in dcs)
                             {
-                                dc.activate();
+                                dc.Activate();
                                 hasToggled = true;
                                 waiting = false;
                             }
