@@ -5,7 +5,7 @@
 //
 // This version of IDeviceControl is for buttons that toggle a boolean on an animator rather than triggering an event
 // shouldnt need to trigger the lightbutton part because the caller shoudl do that.
-// to trigger an event instead use TriggerButton
+// to trigger an event instead use IDC_AnimatorTrigger
 
 using UnityEngine;
 

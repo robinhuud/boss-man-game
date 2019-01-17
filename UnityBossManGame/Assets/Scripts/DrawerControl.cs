@@ -19,7 +19,7 @@ public class DrawerControl : MonoBehaviour, IDeviceControl {
     void Start () {
         if (controlObject == null || string.IsNullOrEmpty(trigger_name))
         {
-            Debug.Log("WTF! No controlObject found, or trigger name is empty.");
+            Debug.Log("No controlObject found, or trigger name is empty.");
         }
         else
         {
