@@ -17,12 +17,7 @@ public class employeeBehavior : MonoBehaviour {
     public Transform lookTarget; // world coordinates to look toward for the animator (player's face)
     public Transform benchTarget; // world coordinates of benchfor hallway navigation.
     public Transform headBone; // the head bone object container
-    public AudioSource voiceSource; // source for voice clips, attached to same game object as the employee's head
-    [SerializeField]
-    public AudioClip[] speechClips;
-    public AudioSource screamSource; // separate source for the screams, dont really need it but it makes the mixing easier
-    [SerializeField]
-    public AudioClip[] fallingClips; // set of clips for falling sounds
+    public EmployeeConversation talkingScript; // EmployeeConversation script to send the "FirstContact" message and "NoticedFalling" messages to
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
     private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
@@ -38,10 +33,11 @@ public class employeeBehavior : MonoBehaviour {
     {
         animator = GetComponentInChildren<Animator>();
         agent = GetComponentInChildren<NavMeshAgent>();
-        voiceSource = GetComponentInChildren<AudioSource>();
+        talkingScript = GetComponent<EmployeeConversation>();
 
         Debug.Assert(animator != null, "Can't find an Animator attached to object, please assign it in the inspector");
         Debug.Assert(agent != null, "Can't find a NavMeshAgent attached to object, please assign it in the inspector");
+        Debug.Assert(talkingScript != null, "Can't find EmployeeConversation object, please assign it in the inspector");
     }
 
     // Use this for initialization
@@ -107,10 +103,7 @@ public class employeeBehavior : MonoBehaviour {
         //Debug.Log("Door has opened at " + Time.time);
         animator.SetBool("Sitting", false);
         stopped = false;
-        if(!playedWelcome)
-        {
-            StartCoroutine(WaitToTalk(5.0f, speechClips[0]));
-        }
+        talkingScript.DoorOpened();
     }
 
 
@@ -156,27 +149,15 @@ public class employeeBehavior : MonoBehaviour {
         }
     }
 
-    IEnumerator WaitToTalk(float duration, AudioClip clip)
-    {
-        float startTime = Time.time;
-        while(Time.time < startTime + duration)
-        {
-            yield return null;
-        }
-        voiceSource.PlayOneShot(clip);
-        playedWelcome = true;
-    }
-
     void ReadyToSit()
     {
         animator.SetTrigger("step_back");
-        // Prevent the navmeshagent from messing up our step-back animation
+        // Prevent the navmeshagent from messing up our step-back animation any more than it already is
         agent.updatePosition = false;
     }
 
     // All of these functions are called by the animator based on events in the various timelines of the animation clips
     // these are used to string animations together, and trigger other events
-
 
     // This is called by the animator after the "step_back" trigger has finished.
     // In order for this to work the NavMeshAgent must have it's updatePosition set to false for at least one frame
@@ -184,7 +165,9 @@ public class employeeBehavior : MonoBehaviour {
     void SteppedBack()
     {
         // After we step back toward the chair, we must trigger the sitting animation.
-        transform.position += new Vector3(-.41f, 0, 0.01f); // offset to get employee into correct position for sitting down to land his butt in the chair.
+        // offset to get employee into correct position for sitting down to land his butt in the chair.
+        // This is because the stepping back animation (unlike the walk cycle) does not have root bone offset baked in.
+        transform.position += new Vector3(-.41f, 0, 0.01f); 
         // After we step back toward the chair, we must trigger the sitting animation.
         animator.SetBool("Sitting", true);
     }
@@ -236,7 +219,6 @@ public class employeeBehavior : MonoBehaviour {
     {
         // turn off navigation because step back animation moves the gameobject and nav would try to move it back
         agent.isStopped = true; 
-        //Debug.Log("StoppedWalking");
     }
 
 	void SatDown()
@@ -248,7 +230,7 @@ public class employeeBehavior : MonoBehaviour {
     void SitLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch (random.Next(0,5)) // 1 in 3 chance of each tap foot or cross legs
+        switch (random.Next(0,5)) // 1 in 6 chance of each tap foot or cross legs
         {
             case 0:
                 animator.SetTrigger("tap_foot");
@@ -266,7 +248,7 @@ public class employeeBehavior : MonoBehaviour {
     void CrossedLegs()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch (random.Next(0,4)) // 1 in 5 chance of uncrossing legs immediately instead of swinging foot
+        switch (random.Next(0,9)) // 1 in 10 chance of uncrossing legs immediately instead of swinging foot
         {
             case 0:
                 animator.SetTrigger("uncross");
@@ -277,7 +259,7 @@ public class employeeBehavior : MonoBehaviour {
     void TapLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch (random.Next(0, 1)) // 1 in 2 chance to stop tapping foot every cycle
+        switch (random.Next(0, 5)) // 1 in 6 chance to stop tapping foot every cycle
         {
             case 0:
                 animator.SetTrigger("stop_tapping");
@@ -288,7 +270,7 @@ public class employeeBehavior : MonoBehaviour {
     void SwingLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch (random.Next(0, 3)) // 1 in 4 chance of leaving foot-swing animation, uncrossing legs.
+        switch (random.Next(0, 5)) // 1 in 6 chance of leaving foot-swing animation, uncrossing legs.
         {
             case 0:
                 animator.SetTrigger("uncross");
@@ -300,12 +282,6 @@ public class employeeBehavior : MonoBehaviour {
     {
         //animator.SetTrigger("gesture_inward");
         staring = true;
-    }
-
-    void NoticedFalling()
-    {
-        AudioClip clip = fallingClips[random.Next(0, fallingClips.Length-1)];
-        screamSource.PlayOneShot(clip);
     }
 
     void FinishedFalling()
