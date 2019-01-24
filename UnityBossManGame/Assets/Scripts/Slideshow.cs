@@ -7,7 +7,7 @@ public class Slideshow : MonoBehaviour, IDeviceControl {
     [SerializeField]
     public Texture[] slides;
     public float delay;
-    bool isRunning = true;
+    bool isRunning = false;
     int slideId = 0;
     private static IEnumerator CoRoutine;
 	// Use this for initialization
@@ -16,6 +16,10 @@ public class Slideshow : MonoBehaviour, IDeviceControl {
         CoRoutine = WaitAndAdvance(delay);
         AdvanceFrame();
         StartCoroutine(CoRoutine);
+        if (!isRunning)
+        {
+            StopCoroutine(CoRoutine);
+        }
 	}
 	
 	// Update is called once per frame

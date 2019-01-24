@@ -17,12 +17,10 @@ public class employeeBehavior : MonoBehaviour {
     public Transform lookTarget; // world coordinates to look toward for the animator (player's face)
     public Transform benchTarget; // world coordinates of benchfor hallway navigation.
     public Transform headBone; // the head bone object container
-    public EmployeeConversation talkingScript; // EmployeeConversation script to send the "FirstContact" message and "NoticedFalling" messages to
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
     private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
     private bool isInHall = true;
-    private bool playedWelcome = false;
     private bool staring = false;
 
     private static System.Random random = new System.Random();
@@ -33,11 +31,9 @@ public class employeeBehavior : MonoBehaviour {
     {
         animator = GetComponentInChildren<Animator>();
         agent = GetComponentInChildren<NavMeshAgent>();
-        talkingScript = GetComponent<EmployeeConversation>();
 
         Debug.Assert(animator != null, "Can't find an Animator attached to object, please assign it in the inspector");
         Debug.Assert(agent != null, "Can't find a NavMeshAgent attached to object, please assign it in the inspector");
-        Debug.Assert(talkingScript != null, "Can't find EmployeeConversation object, please assign it in the inspector");
     }
 
     // Use this for initialization
@@ -103,7 +99,6 @@ public class employeeBehavior : MonoBehaviour {
         //Debug.Log("Door has opened at " + Time.time);
         animator.SetBool("Sitting", false);
         stopped = false;
-        talkingScript.DoorOpened();
     }
 
 
@@ -274,6 +269,9 @@ public class employeeBehavior : MonoBehaviour {
         {
             case 0:
                 animator.SetTrigger("uncross");
+                break;
+            case 1:
+                animator.SetTrigger("gesture_inward");
                 break;
         }
     }

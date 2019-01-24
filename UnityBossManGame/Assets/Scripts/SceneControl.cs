@@ -13,6 +13,7 @@ using UnityEngine.AI;
 public class SceneControl : MonoBehaviour {
 
     public employeeBehavior employeeScript;
+    public EmployeeConversation conversationScript;
 
     // This method is called from the editor cog menu, useful for attaching
     // serializable fileds with default values.
@@ -23,7 +24,6 @@ public class SceneControl : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-
 	}
 	
 	// Update is called once per frame
@@ -38,8 +38,13 @@ public class SceneControl : MonoBehaviour {
         {
             case "door":
                 employeeScript.DoorOpened();
+                conversationScript.DoorOpened();
                 break;
             case "trapdoor":
+                break;
+            case "howmake":
+            case "whatplace":
+                conversationScript.AskedQuestion(command);
                 break;
             default:
                 break;
