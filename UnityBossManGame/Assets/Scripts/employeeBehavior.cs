@@ -80,7 +80,7 @@ public class employeeBehavior : MonoBehaviour {
         if(staring)
         {
             staring = false;
-            StartCoroutine(StareAt(headBone.rotation, lookTarget, 0.5f));
+            //StartCoroutine(StareAt(headBone.rotation, lookTarget, 2.5f));
         }
     }
 
@@ -225,15 +225,17 @@ public class employeeBehavior : MonoBehaviour {
     void SitLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch (random.Next(0,5)) // 1 in 6 chance of each tap foot or cross legs
+        switch (random.Next(0,4)) // 1 in 6 chance of each tap foot or cross legs
         {
             case 0:
+            case 1:
                 animator.SetTrigger("tap_foot");
                 break;
-            case 1:
+            case 2:
+            case 3:
                 animator.SetTrigger("cross_legs");
                 break;
-            case 2:
+            case 4:
                 staring = false;
                 // In this case we just stay in the same loop, and continue to sit
                 break;
@@ -265,15 +267,20 @@ public class employeeBehavior : MonoBehaviour {
     void SwingLoop()
     {
         // every time we finish a loop animation, we pick what to do next randomly
-        switch (random.Next(0, 5)) // 1 in 6 chance of leaving foot-swing animation, uncrossing legs.
+        switch (random.Next(0, 7)) // 1 in 6 chance of leaving foot-swing animation, uncrossing legs.
         {
             case 0:
                 animator.SetTrigger("uncross");
                 break;
             case 1:
-                animator.SetTrigger("gesture_inward");
+                animator.SetTrigger("gesture_wide");
                 break;
         }
+    }
+
+    void ArmsWide()
+    {
+        staring = true;
     }
 
     void UncrossedLegs()

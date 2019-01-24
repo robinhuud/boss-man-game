@@ -9,10 +9,12 @@ public class ChangeMyTexture : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Debug.Assert(tex != null, "No texture specified for ChangeMyTexture");
+        GetComponent<Renderer>().enabled = false;
     }
 	
     public void ShowTexture(int id)
     {
+        GetComponent<Renderer>().enabled = true;
         GetComponent<Renderer>().material.SetTexture("_MainTex", tex[id]);
     }
 	// Update is called once per frame
