@@ -12,6 +12,7 @@ public class employeeBehavior : MonoBehaviour {
 
     public Animator animator; // The Animator which controls the animation of the employee
     public NavMeshAgent agent; // The NavMeshAgent which controls where the employee can move in the scene
+    public EmployeeConversation conversation; // The EmployeeConversation object controlling the speech and reactions of the employee
     public Transform spawnPoint; // world coordinates of the spawn point (and reset point) of the employee
     public Transform target; // world coordinates to move toward for the NavMeshAgent
     public Transform lookTarget; // world coordinates to look toward for the animator (player's face)
@@ -20,7 +21,6 @@ public class employeeBehavior : MonoBehaviour {
 
     private bool stopped = true; // Is the NavMeshAgent currently stopped?
     private float brakingDistance = .35f; // fudge factor to trigger the stop walking animation
-    private bool isInHall = true;
     private bool staring = false;
 
     private static System.Random random = new System.Random();
@@ -177,15 +177,15 @@ public class employeeBehavior : MonoBehaviour {
             animator.SetBool("Walking", true); // should trigger state change, then StartedWalking() callback
             //agent.updatePosition = true;
 
-            if (isInHall)
+            if (conversation.isInHall)
             {
                 agent.SetDestination(target.position);
-                isInHall = false;
+                conversation.isInHall = false;
             }
             else
             {
                 agent.SetDestination(benchTarget.position);
-                isInHall = true;
+                conversation.isInHall = true;
             }
         }
     }
@@ -295,6 +295,6 @@ public class employeeBehavior : MonoBehaviour {
         agent.Warp(spawnPoint.position);
         animator.SetBool("Walking", true);
         agent.SetDestination(benchTarget.position);
-        isInHall = true;
+        conversation.isInHall = true;
     }
 }

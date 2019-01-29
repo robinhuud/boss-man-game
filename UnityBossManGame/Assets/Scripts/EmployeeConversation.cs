@@ -11,11 +11,17 @@ public class EmployeeConversation : MonoBehaviour {
     [SerializeField]
     public AudioClip[] fallingClips; // set of clips for falling sounds
     [SerializeField]
-    public ChangeMyTexture[] questionButtonScripts;
+    public IDCQuestionButton[] questionButtons;
+    [SerializeField]
+    public Texture[] questionTextures;
+    [SerializeField]
+    public string[] questionCommands;
+    public bool isInHall = true;
 
     private static System.Random random = new System.Random();
     private bool[] saidAlready;
     private bool hasFallen = false;
+    private int nextQuestion = 2;
 
     // Called form the editor Cog menu, useful for setting defaults, which can then be overridden
     void Reset()
@@ -51,6 +57,10 @@ public class EmployeeConversation : MonoBehaviour {
         {
             StartCoroutine(WaitThenSay(6f, 1));
         }
+        if(saidAlready[0] && !isInHall)
+        {
+            StartCoroutine(WaitThenSay(1f, 3));
+        }
     }
 
     // Primary way the question tiles send questions to the conversation
@@ -59,21 +69,28 @@ public class EmployeeConversation : MonoBehaviour {
     {
         if(saidAlready[2])
         {
-            switch (questionKey)
+            if(!isInHall)
             {
-                case "whatplace":
-                    if (!saidAlready[3])
-                    {
-                        StartCoroutine(WaitThenSay(2f, 3));
-                    }
-                    break;
-                case "howmake":
-                    if (!saidAlready[4])
-                    {
-                        StartCoroutine(WaitThenSay(2f, 4));
-                    }
-                    break;
+                switch (questionKey)
+                {
+                    case "whatplace":
+                        if (!saidAlready[5])
+                        {
+                            StartCoroutine(WaitThenSay(2f, 5));
+                        }
+                        break;
+                    case "howmake":
+                        if (!saidAlready[6])
+                        {
+                            StartCoroutine(WaitThenSay(2f, 6));
+                        }
+                        break;
+                }
             }
+        }
+        else
+        {
+            Debug.Assert(false, "asked question before revealing buttons, WTF??");
         }
     }
 
@@ -88,6 +105,39 @@ public class EmployeeConversation : MonoBehaviour {
         // does this mean we can't interrupt it?
         voiceSource.PlayOneShot(speechClips[clipId]);
         saidAlready[clipId] = true;
+        yield return new WaitForSeconds(speechClips[clipId].length);
+        doneSpeaking(clipId);
+    }
+
+    private void doneSpeaking(int clip)
+    {
+        if(clip > 4)
+        {
+            foreach (IDCQuestionButton qb in questionButtons)
+            {
+                if (questionCommands[clip].Equals(qb.GetCommand()))
+                {
+                    nextQuestion++;
+                    if (nextQuestion < questionTextures.Length)
+                    {
+                        qb.ShowQuestion(questionTextures[nextQuestion], questionCommands[nextQuestion]);
+                    }
+                    else
+                    {
+                        if (!saidAlready[4])
+                        {
+                            StartCoroutine(WaitThenSay(.2f, 4));
+                        }
+                    }
+                }
+            }
+        }
+ 
+        if(clip == 2)
+        {
+            questionButtons[0].ShowQuestion(questionTextures[0], questionCommands[0]);
+            questionButtons[1].ShowQuestion(questionTextures[1], questionCommands[1]);
+        }
     }
 
     // Triggered by the animation triggers of the same name, (see employeeBehavior.cs)
@@ -106,8 +156,6 @@ public class EmployeeConversation : MonoBehaviour {
         if(saidAlready[0] && !saidAlready[2])
         {
             StartCoroutine(WaitThenSay(.2f, 2));
-            questionButtonScripts[0].ShowTexture(0);
-            questionButtonScripts[1].ShowTexture(0);
         }
     }
 }

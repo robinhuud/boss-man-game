@@ -14,6 +14,7 @@ public class SceneControl : MonoBehaviour {
 
     public employeeBehavior employeeScript;
     public EmployeeConversation conversationScript;
+    public bool isInHall = true;
 
     // This method is called from the editor cog menu, useful for attaching
     // serializable fileds with default values.
@@ -44,9 +45,8 @@ public class SceneControl : MonoBehaviour {
                 break;
             case "howmake":
             case "whatplace":
-                conversationScript.AskedQuestion(command);
-                break;
             default:
+                conversationScript.AskedQuestion(command);
                 break;
         }
     }

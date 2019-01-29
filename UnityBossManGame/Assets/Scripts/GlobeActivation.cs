@@ -27,6 +27,22 @@ public class GlobeActivation : MonoBehaviour, IDeviceControl {
             mapId = 0;
         }
         mat.SetTexture("_MainTex", mapList[mapId]);
+        StartCoroutine(RotateAroundZAxis(1f));
+    }
+
+    IEnumerator RotateAroundZAxis(float duration)
+    {
+        float startTime = Time.time;
+        float nowTime = startTime;
+        Vector3 locals = this.transform.localEulerAngles;
+        while (nowTime < startTime + duration)
+        {
+            float angle = 720f * ((nowTime - startTime) / duration);
+            this.transform.localEulerAngles = new Vector3(locals.x, locals.y, angle);
+            yield return null;
+            nowTime = Time.time;
+        }
+        this.transform.localEulerAngles = new Vector3(locals.x, locals.y, locals.z);
     }
 
     public bool IsActive()
