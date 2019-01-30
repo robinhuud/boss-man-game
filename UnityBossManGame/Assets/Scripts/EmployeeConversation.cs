@@ -21,7 +21,6 @@ public class EmployeeConversation : MonoBehaviour {
     private static System.Random random = new System.Random();
     private bool[] saidAlready;
     private bool hasFallen = false;
-    private int nextQuestion = 2;
 
     // Called form the editor Cog menu, useful for setting defaults, which can then be overridden
     void Reset()
@@ -76,13 +75,25 @@ public class EmployeeConversation : MonoBehaviour {
                     case "whatplace":
                         if (!saidAlready[5])
                         {
-                            StartCoroutine(WaitThenSay(2f, 5));
+                            StartCoroutine(WaitThenSay(1f, 5));
                         }
                         break;
                     case "howmake":
                         if (!saidAlready[6])
                         {
-                            StartCoroutine(WaitThenSay(2f, 6));
+                            StartCoroutine(WaitThenSay(1f, 6));
+                        }
+                        break;
+                    case "whatelse":
+                        if(!saidAlready[7])
+                        {
+                            StartCoroutine(WaitThenSay(1f, 7));
+                        }
+                        break;
+                    case "whatrole":
+                        if (!saidAlready[8])
+                        {
+                            StartCoroutine(WaitThenSay(1f, 8));
                         }
                         break;
                 }
@@ -111,32 +122,39 @@ public class EmployeeConversation : MonoBehaviour {
 
     private void doneSpeaking(int clip)
     {
-        if(clip > 4)
+        switch (clip)
         {
-            foreach (IDCQuestionButton qb in questionButtons)
-            {
-                if (questionCommands[clip].Equals(qb.GetCommand()))
-                {
-                    nextQuestion++;
-                    if (nextQuestion < questionTextures.Length)
-                    {
-                        qb.ShowQuestion(questionTextures[nextQuestion], questionCommands[nextQuestion]);
-                    }
-                    else
-                    {
-                        if (!saidAlready[4])
-                        {
-                            StartCoroutine(WaitThenSay(.2f, 4));
-                        }
-                    }
-                }
-            }
+            case 2:
+                questionButtons[0].ShowQuestion(questionTextures[0], questionCommands[0]);
+                questionButtons[1].ShowQuestion(questionTextures[1], questionCommands[1]);
+                break;
+            case 5:
+                questionButtons[0].ShowQuestion(questionTextures[2], questionCommands[2]);
+                break;
+            case 6:
+                questionButtons[1].ShowQuestion(questionTextures[3], questionCommands[3]);
+                break;
+            case 7:
+                questionButtons[0].Hide();
+                break;
+            case 8:
+                questionButtons[1].Hide();
+                break;
+            case 0:
+            case 1:
+            case 3:
+            case 4:
+            default:
+                break;
+
         }
- 
-        if(clip == 2)
+        if(!questionButtons[0].IsActive() && !questionButtons[1].IsActive())
         {
-            questionButtons[0].ShowQuestion(questionTextures[0], questionCommands[0]);
-            questionButtons[1].ShowQuestion(questionTextures[1], questionCommands[1]);
+            if (saidAlready[2] && !saidAlready[4])
+            {
+                StartCoroutine(WaitThenSay(3f, 4));
+
+            }
         }
     }
 

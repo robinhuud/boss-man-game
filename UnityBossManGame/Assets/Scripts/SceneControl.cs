@@ -45,6 +45,8 @@ public class SceneControl : MonoBehaviour {
                 break;
             case "howmake":
             case "whatplace":
+            case "whatrole":
+            case "whatelse":
             default:
                 conversationScript.AskedQuestion(command);
                 break;
