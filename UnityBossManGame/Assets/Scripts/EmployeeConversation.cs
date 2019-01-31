@@ -21,6 +21,7 @@ public class EmployeeConversation : MonoBehaviour {
     private static System.Random random = new System.Random();
     private bool[] saidAlready;
     private bool hasFallen = false;
+    private bool isSpeaking = false;
 
     // Called form the editor Cog menu, useful for setting defaults, which can then be overridden
     void Reset()
@@ -48,15 +49,15 @@ public class EmployeeConversation : MonoBehaviour {
     // other events are sent to this script from the animator (see below)
     public void DoorOpened()
     {
-        if(!saidAlready[0])
+        if(!saidAlready[0]) // Welcome speech
         {
             StartCoroutine(WaitThenSay(6f, 0));
         }
-        if(hasFallen && !saidAlready[1])
+        if(hasFallen && !saidAlready[1]) // Can't blame you speech
         {
             StartCoroutine(WaitThenSay(6f, 1));
         }
-        if(saidAlready[0] && !isInHall)
+        if(saidAlready[0] && !isInHall) // Leaving room on own volition
         {
             StartCoroutine(WaitThenSay(1f, 3));
         }
@@ -66,6 +67,10 @@ public class EmployeeConversation : MonoBehaviour {
     // is by using the IDCSendMessageToController interface.
     public void AskedQuestion(string questionKey)
     {
+        if(isSpeaking)
+        {
+            return;
+        }
         if(saidAlready[2])
         {
             if(!isInHall)
@@ -99,10 +104,6 @@ public class EmployeeConversation : MonoBehaviour {
                 }
             }
         }
-        else
-        {
-            Debug.Assert(false, "asked question before revealing buttons, WTF??");
-        }
     }
 
     IEnumerator WaitThenSay(float waitTime, int clipId)
@@ -115,6 +116,7 @@ public class EmployeeConversation : MonoBehaviour {
         // After the timer runs out, the AudioSource plays the clip as a one-shot
         // does this mean we can't interrupt it?
         voiceSource.PlayOneShot(speechClips[clipId]);
+        isSpeaking = true;
         saidAlready[clipId] = true;
         yield return new WaitForSeconds(speechClips[clipId].length);
         doneSpeaking(clipId);
@@ -122,6 +124,7 @@ public class EmployeeConversation : MonoBehaviour {
 
     private void doneSpeaking(int clip)
     {
+        isSpeaking = false;
         switch (clip)
         {
             case 2:
@@ -165,6 +168,7 @@ public class EmployeeConversation : MonoBehaviour {
     void NoticedFalling()
     {
         AudioClip clip = fallingClips[random.Next(0, fallingClips.Length - 1)];
+        voiceSource.Stop();
         screamSource.PlayOneShot(clip);
         hasFallen = true;
     }
