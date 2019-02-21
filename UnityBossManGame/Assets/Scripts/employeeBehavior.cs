@@ -273,7 +273,7 @@ public class employeeBehavior : MonoBehaviour {
                 animator.SetTrigger("uncross");
                 break;
             case 1:
-                animator.SetTrigger("gesture_wide");
+                animator.SetTrigger("gesture_inward");
                 break;
         }
     }
